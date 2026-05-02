@@ -30,12 +30,13 @@ addon_info = AddonInfo(
 		"""Reports Chinese lunar date, solar terms, Gregorian date and time details, and an interactive calendar query dialog.""",
 	),
 	# version
-	addon_version="0.1.0",
+	addon_version="0.1.1",
 	# Brief changelog for this version
 	# Translators: what's new content for the add-on version to be shown in the add-on store
 	addon_changelog=_(
-		"""Initial release with NVDA+F11: once for Chinese lunar date and solar term details, twice for additional lunar context, and three times for the calendar query dialog.
-Adds NVDA+F12: once for the current time and twice for Gregorian date details.""",
+		"""### 0.1.1
+
+* Sync upstream AddonTemplate and release build checks.""",
 	),
 	# Author(s)
 	addon_author="Cary-rowen <manchen_0528@outlook.com>",
