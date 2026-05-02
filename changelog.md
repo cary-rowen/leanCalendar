@@ -1,5 +1,9 @@
 # leanCalendar Changelog
 
+## 0.1.2
+
+* Update translation.
+
 ## 0.1.1
 
 * Sync upstream AddonTemplate and release build checks.
