@@ -1,0 +1,454 @@
+# Chinese translations for leanCalendar.
+# Copyright (C) 2026 Cary-rowen
+# This file is distributed under the same license as the leanCalendar package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: leanCalendar 0.1.0\n"
+"Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
+"POT-Creation-Date: 2026-05-02 22:26+0800\n"
+"PO-Revision-Date: 2026-05-02 20:17+0800\n"
+"Last-Translator: Cary-rowen <manchen_0528@outlook.com>\n"
+"Language-Team: Chinese (Simplified)\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. Translators: Solar term choice in the query controls. {term} is the solar term name,
+#. and {dateTime} is its Gregorian date and time.
+#: addon\globalPlugins\leanCalendar\data.py:208
+#, python-brace-format
+msgid "{term} {dateTime}"
+msgstr "{term} {dateTime}"
+
+#. Translators: Summary at the top of the leanCalendar dialog.
+#: addon\globalPlugins\leanCalendar\data.py:223
+#, python-brace-format
+msgid "{dateTime} | Lunar {lunarDate} | {solarTermDay}"
+msgstr "{dateTime} | 农历 {lunarDate} | {solarTermDay}"
+
+#. Translators: Report item for the full moon time. {time} is the time of day.
+#: addon\globalPlugins\leanCalendar\data.py:243
+#: addon\globalPlugins\leanCalendar\messages.py:77
+#, python-brace-format
+msgid "full moon at {time}"
+msgstr "望 {time}"
+
+#. Translators: Huangli Yi item, listing suitable activities for the day.
+#: addon\globalPlugins\leanCalendar\data.py:251
+#, python-brace-format
+msgid "Yi {items}"
+msgstr "宜 {items}"
+
+#. Translators: Huangli Ji item, listing activities to avoid for the day.
+#: addon\globalPlugins\leanCalendar\data.py:259
+#, python-brace-format
+msgid "Ji {items}"
+msgstr "忌 {items}"
+
+#. Translators: Cardinal direction. {direction} is one of east, south, west, or north.
+#: addon\globalPlugins\leanCalendar\data.py:266
+#, python-brace-format
+msgid "due {direction}"
+msgstr "正{direction}"
+
+#. Translators: Huangli Chong Sha item.
+#. {dayZodiac} and {targetZodiac} are Chinese zodiac names, {targetCycle} is a sexagenary cycle,
+#. and {direction} is a Sha direction.
+#: addon\globalPlugins\leanCalendar\data.py:279
+#, python-brace-format
+msgid "{dayZodiac} day chong {targetZodiac} ({targetCycle}), sha {direction}"
+msgstr "{dayZodiac}日冲{targetZodiac}({targetCycle}) 煞{direction}"
+
+#. Translators: Almanac five elements item.
+#. {stemElement}, {branchElement}, and {sound} are Chinese five-element or Na Yin names.
+#: addon\globalPlugins\leanCalendar\data.py:291
+#, python-brace-format
+msgid "five elements {stemElement}{branchElement} {sound}"
+msgstr "五行 {stemElement}{branchElement} {sound}"
+
+#. Translators: TwentyEightStar detail item, matching tyme4py's TwentyEightStar type.
+#. {zone}, {star}, {sevenStar}, {animal}, and {luck} are Chinese astrology names.
+#: addon\globalPlugins\leanCalendar\data.py:302
+#, python-brace-format
+msgid "{zone} {star}{sevenStar}{animal} {luck}"
+msgstr "{zone}方{star}{sevenStar}{animal}-{luck}"
+
+#. Translators: Huangli deity direction item. Cai Shen, Xi Shen, and Fu Shen are deity names.
+#: addon\globalPlugins\leanCalendar\data.py:314
+#, python-brace-format
+msgid "Cai Shen {caiShen}, Xi Shen {xiShen}, Fu Shen {fuShen}"
+msgstr "财神 {caiShen}，喜神 {xiShen}，福神 {fuShen}"
+
+#. Translators: Huangdao/Heidao TwelveStar item, matching tyme4py's TwelveStar type.
+#: addon\globalPlugins\leanCalendar\data.py:325
+#, python-brace-format
+msgid "TwelveStar {twelveStar}-{ecliptic}-{luck}"
+msgstr "值神 {twelveStar}-{ecliptic}-{luck}"
+
+#. Translators: Huangli Ji Shen item.
+#: addon\globalPlugins\leanCalendar\data.py:339
+#, python-brace-format
+msgid "Ji Shen {gods}"
+msgstr "吉神宜趋 {gods}"
+
+#. Translators: Huangli Xiong Shen item.
+#: addon\globalPlugins\leanCalendar\data.py:341
+#, python-brace-format
+msgid "Xiong Shen {gods}"
+msgstr "凶神宜忌 {gods}"
+
+#. Translators: LunarHour luck item, matching tyme4py's LunarHour type.
+#: addon\globalPlugins\leanCalendar\data.py:350
+#, python-brace-format
+msgid "LunarHour luck {items}"
+msgstr "时辰吉凶 {items}"
+
+#. Translators: Report item for the Chinese zodiac. {zodiac} is a zodiac animal name.
+#: addon\globalPlugins\leanCalendar\data.py:389
+#: addon\globalPlugins\leanCalendar\messages.py:75
+#, python-brace-format
+msgid "Chinese zodiac {zodiac}"
+msgstr "生肖 {zodiac}"
+
+#. Translators: Report item for time remaining until the next solar term.
+#: addon\globalPlugins\leanCalendar\data.py:412
+#: addon\globalPlugins\leanCalendar\formats.py:182
+#: addon\globalPlugins\leanCalendar\messages.py:70
+#, python-brace-format
+msgid "until {term} {remaining}"
+msgstr "距{term}{remaining}"
+
+#. Translators: Jianchu duty item, matching tyme4py's Duty type.
+#: addon\globalPlugins\leanCalendar\data.py:433
+#: addon\globalPlugins\leanCalendar\messages.py:80
+#, python-brace-format
+msgid "Jianchu duty {duty}"
+msgstr "日十二建 {duty}"
+
+#. Translators: TwentyEightStar item, matching tyme4py's TwentyEightStar type.
+#: addon\globalPlugins\leanCalendar\data.py:440
+#, python-brace-format
+msgid "TwentyEightStar {twentyEightStar}"
+msgstr "星宿 {twentyEightStar}"
+
+#. Translators: NineStar item, matching tyme4py's NineStar type.
+#: addon\globalPlugins\leanCalendar\data.py:446
+#, python-brace-format
+msgid "NineStar {star}"
+msgstr "九星 {star}"
+
+#. Translators: Report item for Xiao Liu Ren.
+#: addon\globalPlugins\leanCalendar\data.py:448
+#, python-brace-format
+msgid "Xiao Liu Ren {minorRen}"
+msgstr "小六壬 {minorRen}"
+
+#. Translators: FetusDay item, matching tyme4py's FetusDay type.
+#: addon\globalPlugins\leanCalendar\data.py:452
+#, python-brace-format
+msgid "FetusDay {fetusDay}"
+msgstr "胎神方位 {fetusDay}"
+
+#. Translators: PengZu Baiji item, matching tyme4py's PengZu type.
+#: addon\globalPlugins\leanCalendar\data.py:456
+#, python-brace-format
+msgid "PengZu Baiji {pengZu}"
+msgstr "彭祖百忌 {pengZu}"
+
+#. Translators: Section title in the leanCalendar dialog result.
+#: addon\globalPlugins\leanCalendar\data.py:491
+msgid "Gregorian"
+msgstr "公历"
+
+#. Translators: Section title in the leanCalendar dialog result.
+#: addon\globalPlugins\leanCalendar\data.py:493
+msgid "Lunar"
+msgstr "农历"
+
+#. Translators: Section title in the leanCalendar dialog result.
+#: addon\globalPlugins\leanCalendar\data.py:495
+msgid "Solar Terms and Phenology"
+msgstr "节气物候"
+
+#. Translators: Section title in the leanCalendar dialog result.
+#: addon\globalPlugins\leanCalendar\data.py:497
+msgid "Almanac"
+msgstr "黄历"
+
+#. Translators: Title of the leanCalendar dialog.
+#. Translators: The name of the category for this add-on's scripts in the Input Gestures dialog.
+#. Add-on summary/title, usually the user visible name of the add-on
+#. Translators: Summary/title for this add-on
+#. to be shown on installation and add-on information found in add-on store
+#: addon\globalPlugins\leanCalendar\dialog.py:75
+#: addon\globalPlugins\leanCalendar\__init__.py:45 buildVars.py:26
+msgid "leanCalendar"
+msgstr "历历在目-万年历"
+
+#. Translators: Basic tab in the leanCalendar dialog.
+#: addon\globalPlugins\leanCalendar\dialog.py:116
+msgid "Basic"
+msgstr "基本"
+
+#. Translators: Label for the Basic tab result.
+#: addon\globalPlugins\leanCalendar\dialog.py:153
+msgid "&Result:"
+msgstr "结果(&R):"
+
+#. Translators: Label for the calendar query controls group.
+#: addon\globalPlugins\leanCalendar\dialog.py:163
+msgid "Query"
+msgstr "查询"
+
+#. Translators: Label for Gregorian year query controls.
+#: addon\globalPlugins\leanCalendar\dialog.py:170
+msgid "Gregorian &year:"
+msgstr "公历年(&Y):"
+
+#. Translators: Label for Gregorian month query controls.
+#: addon\globalPlugins\leanCalendar\dialog.py:177
+msgid "Gregorian &month:"
+msgstr "公历月(&M):"
+
+#. Translators: Label for Gregorian day query controls.
+#: addon\globalPlugins\leanCalendar\dialog.py:183
+msgid "Gregorian &day:"
+msgstr "公历日(&D):"
+
+#. Translators: Label for Gregorian hour query controls.
+#: addon\globalPlugins\leanCalendar\dialog.py:189
+msgid "Gregorian &hour:"
+msgstr "公历时(&H):"
+
+#. Translators: Button that resets the calendar query to the current date and time.
+#: addon\globalPlugins\leanCalendar\dialog.py:196
+msgid "&Today"
+msgstr "回到今天(&T)"
+
+#. Translators: Label for lunar year query controls.
+#: addon\globalPlugins\leanCalendar\dialog.py:204
+msgid "Lunar y&ear:"
+msgstr "农历年(&E):"
+
+#. Translators: Label for lunar month query controls.
+#: addon\globalPlugins\leanCalendar\dialog.py:211
+msgid "Lunar mo&nth:"
+msgstr "农历月(&N):"
+
+#. Translators: Label for lunar day query controls.
+#: addon\globalPlugins\leanCalendar\dialog.py:217
+msgid "Lunar d&ay:"
+msgstr "农历日(&A):"
+
+#. Translators: Label for lunar hour query controls.
+#: addon\globalPlugins\leanCalendar\dialog.py:223
+msgid "Lunar h&our:"
+msgstr "时辰(&O):"
+
+#. Translators: Label for solar term query controls.
+#: addon\globalPlugins\leanCalendar\dialog.py:232
+msgid "&Solar term:"
+msgstr "节气(&S):"
+
+#. Translators: Error message shown when the leanCalendar dialog cannot update its date.
+#: addon\globalPlugins\leanCalendar\dialog.py:585
+msgid "Unable to update leanCalendar."
+msgstr "无法更新历历在目-万年历。"
+
+#. Translators: Reports a 30-day lunar month. {month} is the lunar month name.
+#: addon\globalPlugins\leanCalendar\formats.py:33
+#, python-brace-format
+msgid "{month} long"
+msgstr "{month}大"
+
+#. Translators: Reports a 29-day lunar month. {month} is the lunar month name.
+#: addon\globalPlugins\leanCalendar\formats.py:35
+#, python-brace-format
+msgid "{month} short"
+msgstr "{month}小"
+
+#. Translators: Compact year, month, day, and hour report.
+#: addon\globalPlugins\leanCalendar\formats.py:44
+#, python-brace-format
+msgid "{year} year {month} month {day} day {hour} hour"
+msgstr "{year}年 {month}月 {day}日 {hour}时"
+
+#. Translators: Current time. {hour}, {minute}, and {second} are numbers.
+#: addon\globalPlugins\leanCalendar\formats.py:54
+#, python-brace-format
+msgid "{hour} hour {minute} minute {second} second"
+msgstr "{hour}点{minute}分{second}秒"
+
+#. Translators: Gregorian date. {year}, {month}, and {day} are numbers.
+#: addon\globalPlugins\leanCalendar\formats.py:63
+#, python-brace-format
+msgid "{year}-{month}-{day}"
+msgstr "{year}年{month}月{day}日"
+
+#. Translators: Gregorian date and hour. {year}, {month}, {day}, and {hour} are numbers.
+#: addon\globalPlugins\leanCalendar\formats.py:72
+#, python-brace-format
+msgid "{year}-{month}-{day} {hour}:00"
+msgstr "{year}年 {month}月 {day}日 {hour}时"
+
+#. Translators: Gregorian month day count. {month} and {days} are numbers.
+#: addon\globalPlugins\leanCalendar\formats.py:91
+#, python-brace-format
+msgid "{month} has {days} days"
+msgstr "{month}月{days}天"
+
+#. Translators: Gregorian weekday report. {weekday} is a weekday name or number.
+#: addon\globalPlugins\leanCalendar\formats.py:99
+#, python-brace-format
+msgid "weekday {weekday}"
+msgstr "星期{weekday}"
+
+#. Translators: Gregorian day-of-year report. {dayNumber} is a number.
+#: addon\globalPlugins\leanCalendar\formats.py:104
+#, python-brace-format
+msgid "year day {dayNumber}"
+msgstr "今年第{dayNumber}天"
+
+#. Translators: Gregorian week-of-year report. {weekNumber} is a number.
+#: addon\globalPlugins\leanCalendar\formats.py:110
+#, python-brace-format
+msgid "week {weekNumber}"
+msgstr "第{weekNumber}周"
+
+#. Translators: Gregorian quarter report. {quarter} is a number from 1 to 4.
+#: addon\globalPlugins\leanCalendar\formats.py:116
+#, python-brace-format
+msgid "quarter {quarter}"
+msgstr "第{quarter}季度"
+
+#. Translators: Western zodiac sign report. {sign} is a Western zodiac sign name.
+#: addon\globalPlugins\leanCalendar\formats.py:121
+#, python-brace-format
+msgid "Western zodiac sign {sign}"
+msgstr "{sign}座"
+
+#. Translators: Remaining time when the target time has already arrived.
+#: addon\globalPlugins\leanCalendar\formats.py:127
+msgid "now"
+msgstr "现在"
+
+#. Translators: Remaining time until the next solar term. {days} and {hours} are numbers.
+#: addon\globalPlugins\leanCalendar\formats.py:136
+#, python-brace-format
+msgid "{days} days {hours} hours"
+msgstr "{days}天{hours}小时"
+
+#. Translators: Remaining time until the next solar term. {hours} and {minutes} are numbers.
+#: addon\globalPlugins\leanCalendar\formats.py:139
+#, python-brace-format
+msgid "{hours} hours {minutes} minutes"
+msgstr "{hours}小时{minutes}分钟"
+
+#. Translators: Remaining time until the next solar term. {minutes} is a number.
+#: addon\globalPlugins\leanCalendar\formats.py:141
+#, python-brace-format
+msgid "{minutes} minutes"
+msgstr "{minutes}分钟"
+
+#. Translators: Remaining whole days until the next solar term. {days} is a number.
+#: addon\globalPlugins\leanCalendar\formats.py:147
+#, python-brace-format
+msgid "{days} days"
+msgstr "{days}天"
+
+#. Translators: Reports a legal holiday make-up work day. {holiday} is the holiday name.
+#: addon\globalPlugins\leanCalendar\formats.py:163
+#, python-brace-format
+msgid "{holiday} work"
+msgstr "{holiday}班"
+
+#. Translators: Reports a legal holiday day off. {holiday} is the holiday name.
+#: addon\globalPlugins\leanCalendar\formats.py:166
+#, python-brace-format
+msgid "{holiday} off"
+msgstr "{holiday}休"
+
+#. Translators: Report item for the current moon phase day.
+#: addon\globalPlugins\leanCalendar\formats.py:198
+#, python-brace-format
+msgid "moon phase {phaseDay}"
+msgstr "月相 {phaseDay}"
+
+#. Translators: Gregorian day status.
+#: addon\globalPlugins\leanCalendar\formats.py:206
+msgid "weekend"
+msgstr "周末"
+
+#. Translators: Gregorian day status.
+#: addon\globalPlugins\leanCalendar\formats.py:208
+msgid "workday"
+msgstr "工作日"
+
+#. Translators: Separator between calendar report items.
+#: addon\globalPlugins\leanCalendar\formats.py:213
+msgid ", "
+msgstr "，"
+
+#. Translators: Current solar term day report. {term} is a solar term name.
+#: addon\globalPlugins\leanCalendar\formats.py:227
+#, python-brace-format
+msgid "{term} day {dayNumber}"
+msgstr "{term}第{dayNumber}天"
+
+#. Translators: Four pillars report. {year}, {month}, {day}, and {hour} are sexagenary cycle names.
+#: addon\globalPlugins\leanCalendar\messages.py:30
+#, python-brace-format
+msgid "{year} year, {month} month, {day} day, {hour} hour"
+msgstr "{year}年，{month}月，{day}日，{hour}时"
+
+#. Translators: Error message shown when the leanCalendar dialog cannot be opened.
+#: addon\globalPlugins\leanCalendar\__init__.py:36
+msgid "Unable to open leanCalendar."
+msgstr "无法打开历历在目-万年历。"
+
+#: addon\globalPlugins\leanCalendar\__init__.py:50
+msgid ""
+"Report Chinese lunar calendar information. Press once for concise lunar date "
+"and solar term details, press twice for additional lunar context, or press "
+"three times to open the leanCalendar query dialog"
+msgstr ""
+"读出农历信息。按一次读出简要农历日期和节气信息，连按两次读出更多农历上下文，"
+"连按三次打开历历在目-万年历查询对话框"
+
+#. Translators: Error message shown when lunar date or solar term calculation fails.
+#: addon\globalPlugins\leanCalendar\__init__.py:69
+msgid "Unable to calculate the lunar date and solar term."
+msgstr "无法计算农历日期和节气。"
+
+#: addon\globalPlugins\leanCalendar\__init__.py:74
+msgid ""
+"Report Gregorian date and time information. Press once for the current time, "
+"or press twice for Gregorian date details"
+msgstr "读出公历日期和时间信息。按一次读出当前时间，连按两次读出公历日期详情"
+
+#. Translators: Error message shown when Gregorian time or calendar calculation fails.
+#: addon\globalPlugins\leanCalendar\__init__.py:89
+msgid "Unable to calculate the Gregorian time and calendar details."
+msgstr "无法计算公历时间和日历信息。"
+
+#: buildVars.py:30
+msgid ""
+"Reports Chinese lunar date, solar terms, Gregorian date and time details, "
+"and an interactive calendar query dialog."
+msgstr ""
+"读出农历日期、节气、公历日期和时间详情，并提供可交互的万年历查询对话框。"
+
+#: buildVars.py:37
+msgid ""
+"Initial release with NVDA+F11: once for Chinese lunar date and solar term "
+"details, twice for additional lunar context, and three times for the "
+"calendar query dialog.\n"
+"Adds NVDA+F12: once for the current time and twice for Gregorian date "
+"details."
+msgstr ""
+"初始版本：NVDA+F11 一次读出农历日期和节气信息，连按两次读出更多农历上下文，连"
+"按三次打开万年历查询对话框。\n"
+"添加 NVDA+F12 一次读出当前时间，连按两次读出公历日期详情。"
