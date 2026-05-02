@@ -62,7 +62,7 @@ def getDetailedLeanCalendarMessage(now: datetime | None = None) -> str:
 	nextJie = previousJie.next(2)
 	nextJieTime = nextJie.get_julian_day().get_solar_time()
 	fullMoon = createPhase(lunarMonth.get_year(), lunarMonth.get_month_with_leap(), 4)
-	zodiac: object = lunarMonth.get_lunar_year().get_sixty_cycle().get_earth_branch().get_zodiac()
+	zodiacText: str = str(lunarMonth.get_lunar_year().get_sixty_cycle().get_earth_branch().get_zodiac())
 	parts: list[str] = [
 		formats.formatSolarTermCompact(previousJie),
 		formats.formatSolarTermCompact(nextJie),
@@ -72,7 +72,7 @@ def getDetailedLeanCalendarMessage(now: datetime | None = None) -> str:
 			remaining=formats.formatSecondsUntil(nextJieTime.subtract(solarTime)),
 		),
 		# Translators: Report item for the Chinese zodiac. {zodiac} is a zodiac animal name.
-		_("Chinese zodiac {zodiac}").format(zodiac=zodiac),
+		_("Chinese zodiac {zodiac}").format(zodiac=zodiacText),
 		# Translators: Report item for the full moon time. {time} is the time of day.
 		_("full moon at {time}").format(time=formats.formatSolarTimeOnly(fullMoon.get_solar_time())),
 		formats.getPhaseDaySummary(solarDay),
@@ -108,5 +108,5 @@ def getDetailedGregorianMessage(now: datetime | None = None) -> str:
 	gregorianDayStatus: str | None = formats.getGregorianDayStatus(solarDay)
 	if gregorianDayStatus:
 		parts.append(gregorianDayStatus)
-	parts.append(formats.formatConstellation(solarDay))
+	parts.append(formats.formatWesternZodiacSign(solarDay))
 	return formats.joinParts(parts)

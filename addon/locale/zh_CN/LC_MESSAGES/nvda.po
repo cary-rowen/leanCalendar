@@ -335,6 +335,11 @@ msgstr "{sign}座"
 msgid "now"
 msgstr "现在"
 
+#. Translators: Remaining time until the next solar term when less than one minute remains.
+#: addon\globalPlugins\leanCalendar\formats.py:142
+msgid "less than 1 minute"
+msgstr "不足1分钟"
+
 #. Translators: Remaining time until the next solar term. {days} and {hours} are numbers.
 #: addon\globalPlugins\leanCalendar\formats.py:136
 #, python-brace-format

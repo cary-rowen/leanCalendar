@@ -155,8 +155,6 @@ def getSolarMonthChoices(year: int) -> list[ChoiceItem]:
 def getSolarDayChoices(year: int, month: int) -> list[ChoiceItem]:
 	dayCount: int = createSolarDay(year, month, 1).get_solar_month().get_day_count()
 	dayNumbers: list[int] = list(range(1, dayCount + 1))
-	if year == 1582 and month == 10:
-		dayNumbers = [day for day in dayNumbers if day <= 4 or day >= 15]
 	dayNumbers = [day for day in dayNumbers if isSolarDayInQueryRange(createSolarDay(year, month, day))]
 	return [ChoiceItem(day, str(day)) for day in dayNumbers]
 
@@ -177,12 +175,10 @@ def getLunarMonthChoices(year: int) -> list[ChoiceItem]:
 @cache
 def getLunarDayChoices(year: int, month: int) -> list[ChoiceItem]:
 	lunarYear = createLunarYear(year)
-	lunarMonth: LunarMonth = lunarYear.get_first_month()
 	for candidate in lunarYear.get_months():
 		if candidate.get_month_with_leap() == month:
-			lunarMonth = candidate
-			break
-	return [ChoiceItem(day.get_day(), day.get_name()) for day in lunarMonth.get_days()]
+			return [ChoiceItem(day.get_day(), day.get_name()) for day in candidate.get_days()]
+	return []
 
 
 @cache
@@ -230,10 +226,10 @@ def buildSummary(query: CalendarQuery) -> str:
 def _formatFourPillars(lunarDay: LunarDay, lunarHour: LunarHour) -> str:
 	sixtyCycleDay = lunarDay.get_sixty_cycle_day()
 	return formats.formatYearMonthDayHour(
-		sixtyCycleDay.get_year(),
-		sixtyCycleDay.get_month(),
-		sixtyCycleDay.get_sixty_cycle(),
-		lunarHour.get_sixty_cycle(),
+		str(sixtyCycleDay.get_year()),
+		str(sixtyCycleDay.get_month()),
+		str(sixtyCycleDay.get_sixty_cycle()),
+		str(lunarHour.get_sixty_cycle()),
 	)
 
 
@@ -259,8 +255,7 @@ def _formatJi(lunarDay: LunarDay) -> str | None:
 	return _("Ji {items}").format(items=formats.joinLimitedParts(avoids, limit=30))
 
 
-def _formatCardinalDirection(direction: object) -> str:
-	directionName: str = str(direction)
+def _formatCardinalDirection(directionName: str) -> str:
 	if directionName in {"东", "南", "西", "北"}:
 		# Translators: Cardinal direction. {direction} is one of east, south, west, or north.
 		return _("due {direction}").format(direction=directionName)
@@ -312,9 +307,9 @@ def _formatDeityDirections(lunarDay: LunarDay) -> str:
 	heavenStem = lunarDay.get_sixty_cycle().get_heaven_stem()
 	# Translators: Huangli deity direction item. Cai Shen, Xi Shen, and Fu Shen are deity names.
 	return _("Cai Shen {caiShen}, Xi Shen {xiShen}, Fu Shen {fuShen}").format(
-		caiShen=_formatCardinalDirection(heavenStem.get_wealth_direction()),
-		xiShen=_formatCardinalDirection(heavenStem.get_joy_direction()),
-		fuShen=_formatCardinalDirection(heavenStem.get_mascot_direction()),
+		caiShen=_formatCardinalDirection(str(heavenStem.get_wealth_direction())),
+		xiShen=_formatCardinalDirection(str(heavenStem.get_joy_direction())),
+		fuShen=_formatCardinalDirection(str(heavenStem.get_mascot_direction())),
 	)
 
 
@@ -361,7 +356,7 @@ def _buildGregorianLines(solarTime: SolarTime) -> list[str]:
 	]
 	if dayStatus:
 		summaryParts.append(dayStatus)
-	summaryParts.append(formats.formatConstellation(solarDay))
+	summaryParts.append(formats.formatWesternZodiacSign(solarDay))
 	return [
 		formats.joinParts(summaryParts),
 		formats.joinParts(
@@ -380,13 +375,13 @@ def _buildLunarLines(solarTime: SolarTime) -> list[str]:
 	lunarDay: LunarDay = solarDay.get_lunar_day()
 	lunarMonth: LunarMonth = lunarDay.get_lunar_month()
 	lunarHour: LunarHour = solarTime.get_lunar_hour()
-	zodiac: object = lunarMonth.get_lunar_year().get_sixty_cycle().get_earth_branch().get_zodiac()
+	zodiacText: str = str(lunarMonth.get_lunar_year().get_sixty_cycle().get_earth_branch().get_zodiac())
 	dateParts: list[str] = [
 		formats.formatLunarDate(lunarDay),
 		formats.formatLunarMonthSize(lunarMonth),
 		lunarHour.get_name(),
 		# Translators: Report item for the Chinese zodiac. {zodiac} is a zodiac animal name.
-		_("Chinese zodiac {zodiac}").format(zodiac=zodiac),
+		_("Chinese zodiac {zodiac}").format(zodiac=zodiacText),
 	]
 	lunarFestivalSummary: str | None = formats.getLunarFestivalSummary(solarTime)
 	if lunarFestivalSummary:

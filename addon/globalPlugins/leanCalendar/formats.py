@@ -39,7 +39,7 @@ def formatSolarTimeOnly(solarTime: SolarTime) -> str:
 	return f"{solarTime.get_hour():02d}:{solarTime.get_minute():02d}:{solarTime.get_second():02d}"
 
 
-def formatYearMonthDayHour(year: object, month: object, day: object, hour: object) -> str:
+def formatYearMonthDayHour(year: str, month: str, day: str, hour: str) -> str:
 	# Translators: Compact year, month, day, and hour report.
 	return _("{year} year {month} month {day} day {hour} hour").format(
 		year=year,
@@ -116,7 +116,7 @@ def formatQuarter(solarDay: SolarDay) -> str:
 	return _("quarter {quarter}").format(quarter=quarter)
 
 
-def formatConstellation(solarDay: SolarDay) -> str:
+def formatWesternZodiacSign(solarDay: SolarDay) -> str:
 	# Translators: Western zodiac sign report. {sign} is a Western zodiac sign name.
 	return _("Western zodiac sign {sign}").format(sign=solarDay.get_constellation())
 
@@ -137,12 +137,17 @@ def formatSecondsUntil(seconds: int) -> str:
 	if hours:
 		# Translators: Remaining time until the next solar term. {hours} and {minutes} are numbers.
 		return _("{hours} hours {minutes} minutes").format(hours=hours, minutes=minutes)
+	if not minutes:
+		# Translators: Remaining time until the next solar term when less than one minute remains.
+		return _("less than 1 minute")
 	# Translators: Remaining time until the next solar term. {minutes} is a number.
 	return _("{minutes} minutes").format(minutes=minutes)
 
 
-def formatDaysUntil(seconds: int) -> str:
-	days: int = max(0, seconds // 86400)
+def formatBriefSecondsUntil(seconds: int) -> str:
+	if seconds < 86400:
+		return formatSecondsUntil(seconds)
+	days: int = seconds // 86400
 	# Translators: Remaining whole days until the next solar term. {days} is a number.
 	return _("{days} days").format(days=days)
 
@@ -181,7 +186,7 @@ def getBriefNextSolarTermSummary(solarTime: SolarTime) -> str | None:
 	# Translators: Report item for time remaining until the next solar term.
 	return _("until {term} {remaining}").format(
 		term=nextSolarTerm.get_name(),
-		remaining=formatDaysUntil(secondsUntilNextTerm),
+		remaining=formatBriefSecondsUntil(secondsUntilNextTerm),
 	)
 
 

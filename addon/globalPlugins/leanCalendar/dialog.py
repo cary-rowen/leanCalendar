@@ -6,7 +6,9 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from dataclasses import dataclass
 from datetime import datetime
+from threading import Thread
 
 import addonHandler
 import wx
@@ -41,15 +43,31 @@ DISPLAY_MARGIN = (40, 40)
 _calendarDialog: LeanCalendarDialog | None = None
 
 
+@dataclass(frozen=True)
+class _DialogState:
+	query: CalendarQuery
+	summary: str
+	solarYearChoices: list[ChoiceItem]
+	solarMonthChoices: list[ChoiceItem]
+	solarDayChoices: list[ChoiceItem]
+	lunarYearChoices: list[ChoiceItem]
+	lunarMonthChoices: list[ChoiceItem]
+	lunarDayChoices: list[ChoiceItem]
+	lunarHourChoices: list[ChoiceItem]
+	lunarHourValue: int
+	solarTermChoices: list[SolarTermChoice]
+	basicText: str
+
+
 def openCalendarDialog(parent: wx.Window) -> None:
 	global _calendarDialog
 	if _calendarDialog and not _calendarDialog.IsBeingDeleted():
 		_calendarDialog.Raise()
-		_calendarDialog._focusTabs()
+		_calendarDialog.focusTabs()
 		return
 	_calendarDialog = LeanCalendarDialog(parent)
 	_calendarDialog.Show()
-	_calendarDialog._focusTabs()
+	_calendarDialog.focusTabs()
 
 
 class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
@@ -73,18 +91,19 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 	def __init__(self, parent: wx.Window):
 		# Translators: Title of the leanCalendar dialog.
 		title: str = _("leanCalendar")
-		self._query = CalendarQuery.fromDatetime(datetime.now())
-		self._isRefreshing = False
+		self._query: CalendarQuery | None = None
+		self._isRefreshing = True
 		self._solarMonthChoices: list[ChoiceItem] = []
 		self._solarDayChoices: list[ChoiceItem] = []
 		self._lunarMonthChoices: list[ChoiceItem] = []
 		self._lunarDayChoices: list[ChoiceItem] = []
 		self._lunarHourChoices: list[ChoiceItem] = []
 		self._solarTermChoices: list[SolarTermChoice] = []
-		self._choiceItemsById: dict[int, list[ChoiceItem]] = {}
+		self._choiceItemSnapshotsById: dict[int, tuple[ChoiceItem, ...]] = {}
 		self._solarTermItems: tuple[SolarTermChoice, ...] = ()
 		self._pendingQueryFactory: Callable[[], CalendarQuery] | None = None
 		self._refreshCall: wx.CallLater | None = None
+		self._initialLoadThread: Thread | None = None
 		super().__init__(
 			parent,
 			title=title,
@@ -93,6 +112,7 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 		self.mainSizer = wx.BoxSizer(wx.VERTICAL)
 		self.settingsSizer = wx.BoxSizer(wx.VERTICAL)
 		self._makeSettings(self.settingsSizer)
+		self._setQueryControlsEnabled(False)
 		self.mainSizer.Add(
 			self.settingsSizer,
 			border=guiHelper.BORDER_FOR_DIALOGS,
@@ -107,6 +127,7 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 		self.Bind(wx.EVT_WINDOW_DESTROY, self._onDestroy)
 		self.Bind(wx.EVT_CHAR_HOOK, self._onCharHook)
 		self.CentreOnScreen()
+		wx.CallAfter(self._startInitialLoad)
 
 	def _makeSettings(self, settingsSizer: wx.BoxSizer) -> None:
 		self.notebook = wx.Notebook(self)
@@ -115,9 +136,8 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 		# Translators: Basic tab in the leanCalendar dialog.
 		self.notebook.AddPage(self.basicPanel, _("Basic"))
 		settingsSizer.Add(self.notebook, flag=wx.EXPAND, proportion=1)
-		wx.CallAfter(self._refreshControls)
 
-	def _focusTabs(self) -> None:
+	def focusTabs(self) -> None:
 		wx.CallAfter(self.notebook.SetFocus)
 
 	def _setInitialSize(self) -> None:
@@ -150,13 +170,13 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 		sizer.AddSpacer(guiHelper.SPACE_BETWEEN_VERTICAL_DIALOG_ITEMS)
 
 		# Translators: Label for the Basic tab result.
-		sizer.Add(wx.StaticText(panel, label=_("&Result:")), flag=wx.EXPAND)
+		resultLabel = wx.StaticText(panel, label=_("&Result:"))
 		self.resultCtrl = wx.TextCtrl(
 			panel,
 			style=wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH2,
 		)
 		self.resultCtrl.SetMinSize(self.scaleSize((720, 220)))
-		sizer.Add(self.resultCtrl, flag=wx.EXPAND, proportion=1)
+		sizer.Add(guiHelper.associateElements(resultLabel, self.resultCtrl), flag=wx.EXPAND, proportion=1)
 
 	def _makeQueryControls(self, parent: wx.Window, parentSizer: wx.BoxSizer) -> None:
 		# Translators: Label for the calendar query controls group.
@@ -253,39 +273,93 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 		self.lunarHourCtrl.Bind(wx.EVT_CHOICE, self._onLunarChanged)
 		self.solarTermCtrl.Bind(wx.EVT_CHOICE, self._onSolarTermChanged)
 
-	def _refreshControls(self) -> None:
+	def _setQueryControlsEnabled(self, shouldEnable: bool) -> None:
+		for control in (
+			self.solarYearCtrl,
+			self.solarMonthCtrl,
+			self.solarDayCtrl,
+			self.solarHourCtrl,
+			self.todayButton,
+			self.lunarYearCtrl,
+			self.lunarMonthCtrl,
+			self.lunarDayCtrl,
+			self.lunarHourCtrl,
+			self.solarTermCtrl,
+		):
+			control.Enable(shouldEnable)
+
+	def _isAlive(self) -> bool:
+		try:
+			return bool(self) and not self.IsBeingDeleted()
+		except RuntimeError:
+			return False
+
+	def _startInitialLoad(self) -> None:
+		if not self._isAlive() or self._initialLoadThread is not None:
+			return
+		self._initialLoadThread = Thread(
+			target=self._loadInitialState, name="leanCalendarInitialLoad", daemon=True
+		)
+		self._initialLoadThread.start()
+
+	def _loadInitialState(self) -> None:
+		try:
+			state: _DialogState = self._buildDialogState(CalendarQuery.fromDatetime(datetime.now()))
+		except Exception:
+			log.exception("Error loading leanCalendar dialog")
+			wx.CallAfter(self._reportUpdateError, shouldLog=False)
+			return
+		wx.CallAfter(self._applyInitialState, state)
+
+	def _applyInitialState(self, state: _DialogState) -> None:
+		if not self._isAlive() or self._query is not None:
+			return
+		self._applyDialogState(state)
+
+	def _buildDialogState(self, query: CalendarQuery) -> _DialogState:
+		solarTime = query.solarTime
+		solarDay = solarTime.get_solar_day()
+		lunarDay = solarDay.get_lunar_day()
+		lunarMonth = lunarDay.get_lunar_month()
+		lunarHour = solarTime.get_lunar_hour()
+		lunarHourChoices: list[ChoiceItem] = getLunarHourChoices(
+			lunarMonth.get_year(),
+			lunarMonth.get_month_with_leap(),
+			lunarDay.get_day(),
+		)
+		return _DialogState(
+			query=query,
+			summary=buildSummary(query),
+			solarYearChoices=getSolarYearChoices(),
+			solarMonthChoices=getSolarMonthChoices(solarDay.get_year()),
+			solarDayChoices=getSolarDayChoices(solarDay.get_year(), solarDay.get_month()),
+			lunarYearChoices=getLunarYearChoices(),
+			lunarMonthChoices=getLunarMonthChoices(lunarMonth.get_year()),
+			lunarDayChoices=getLunarDayChoices(
+				lunarMonth.get_year(),
+				lunarMonth.get_month_with_leap(),
+			),
+			lunarHourChoices=lunarHourChoices,
+			lunarHourValue=self._getClosestChoiceValue(lunarHourChoices, lunarHour.get_hour(), 0),
+			solarTermChoices=getSolarTermChoices(solarDay.get_year()),
+			basicText=buildBasicText(query),
+		)
+
+	def _applyDialogState(self, state: _DialogState) -> None:
 		self._isRefreshing = True
 		try:
-			solarTime = self._query.solarTime
+			self._query = state.query
+			solarTime = state.query.solarTime
 			solarDay = solarTime.get_solar_day()
 			lunarDay = solarDay.get_lunar_day()
 			lunarMonth = lunarDay.get_lunar_month()
-			lunarHour = solarTime.get_lunar_hour()
-			summary: str = buildSummary(self._query)
-			solarYearChoices: list[ChoiceItem] = getSolarYearChoices()
-			lunarYearChoices: list[ChoiceItem] = getLunarYearChoices()
-			solarMonthChoices: list[ChoiceItem] = getSolarMonthChoices(solarDay.get_year())
-			solarDayChoices: list[ChoiceItem] = getSolarDayChoices(solarDay.get_year(), solarDay.get_month())
-			lunarMonthChoices: list[ChoiceItem] = getLunarMonthChoices(lunarMonth.get_year())
-			lunarDayChoices: list[ChoiceItem] = getLunarDayChoices(
-				lunarMonth.get_year(),
-				lunarMonth.get_month_with_leap(),
-			)
-			lunarHourChoices: list[ChoiceItem] = getLunarHourChoices(
-				lunarMonth.get_year(),
-				lunarMonth.get_month_with_leap(),
-				lunarDay.get_day(),
-			)
-			lunarHourValue: int = self._getClosestChoiceValue(lunarHourChoices, lunarHour.get_hour(), 0)
-			solarTermChoices: list[SolarTermChoice] = getSolarTermChoices(solarDay.get_year())
-			basicText: str = buildBasicText(self._query)
 			self.Freeze()
 			try:
-				if self.summaryCtrl.GetLabel() != summary:
-					self.summaryCtrl.SetLabel(summary)
-				self._setChoiceItems(self.solarYearCtrl, solarYearChoices, solarDay.get_year())
-				self._solarMonthChoices = solarMonthChoices
-				self._solarDayChoices = solarDayChoices
+				if self.summaryCtrl.GetLabel() != state.summary:
+					self.summaryCtrl.SetLabel(state.summary)
+				self._setChoiceItems(self.solarYearCtrl, state.solarYearChoices, solarDay.get_year())
+				self._solarMonthChoices = state.solarMonthChoices
+				self._solarDayChoices = state.solarDayChoices
 				self._setChoiceItems(
 					self.solarMonthCtrl,
 					self._solarMonthChoices,
@@ -297,21 +371,22 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 					getSolarHourChoices(),
 					solarTime.get_hour(),
 				)
-				self._setChoiceItems(self.lunarYearCtrl, lunarYearChoices, lunarMonth.get_year())
-				self._lunarMonthChoices = lunarMonthChoices
-				self._lunarDayChoices = lunarDayChoices
-				self._lunarHourChoices = lunarHourChoices
+				self._setChoiceItems(self.lunarYearCtrl, state.lunarYearChoices, lunarMonth.get_year())
+				self._lunarMonthChoices = state.lunarMonthChoices
+				self._lunarDayChoices = state.lunarDayChoices
+				self._lunarHourChoices = state.lunarHourChoices
 				self._setChoiceItems(
 					self.lunarMonthCtrl,
 					self._lunarMonthChoices,
 					lunarMonth.get_month_with_leap(),
 				)
 				self._setChoiceItems(self.lunarDayCtrl, self._lunarDayChoices, lunarDay.get_day())
-				self._setChoiceItems(self.lunarHourCtrl, self._lunarHourChoices, lunarHourValue)
+				self._setChoiceItems(self.lunarHourCtrl, self._lunarHourChoices, state.lunarHourValue)
 
-				self._solarTermChoices = solarTermChoices
+				self._solarTermChoices = state.solarTermChoices
 				self._setSolarTermSelection()
-				self._setResultText(basicText)
+				self._setResultText(state.basicText)
+				self._setQueryControlsEnabled(True)
 			finally:
 				self.Thaw()
 				self.Layout()
@@ -319,6 +394,8 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 			self._isRefreshing = False
 
 	def _refreshGregorianQuery(self) -> None:
+		if self._query is None:
+			return
 		year: int = self._getEditableYearValue(
 			self.solarYearCtrl,
 			getSolarYearChoices(),
@@ -330,6 +407,8 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 		self._scheduleQuery(lambda: self._buildGregorianQuery(year, month, preferredDay, hour))
 
 	def _refreshLunarQuery(self) -> None:
+		if self._query is None:
+			return
 		lunarYear: int = self._query.solarTime.get_solar_day().get_lunar_day().get_lunar_month().get_year()
 		year: int = self._getEditableYearValue(self.lunarYearCtrl, getLunarYearChoices(), lunarYear)
 		preferredMonth: int = self._getSelectedValue(self.lunarMonthCtrl, self._lunarMonthChoices, 1)
@@ -345,11 +424,12 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 		items: list[ChoiceItem],
 		selectedValue: int,
 	) -> None:
-		if self._choiceItemsById.get(control.GetId()) is not items:
+		itemSnapshot: tuple[ChoiceItem, ...] = tuple(items)
+		if self._choiceItemSnapshotsById.get(control.GetId()) != itemSnapshot:
 			control.Clear()
 			for item in items:
 				control.Append(item.label)
-			self._choiceItemsById[control.GetId()] = items
+			self._choiceItemSnapshotsById[control.GetId()] = itemSnapshot
 		if items:
 			firstValue: int = items[0].value
 			lastValue: int = items[-1].value
@@ -366,6 +446,8 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 			control.SetSelection(-1)
 
 	def _setSolarTermSelection(self) -> None:
+		if self._query is None:
+			return
 		solarTermItems: tuple[SolarTermChoice, ...] = tuple(self._solarTermChoices)
 		if self._solarTermItems != solarTermItems:
 			self.solarTermCtrl.Clear()
@@ -501,8 +583,7 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 		if self._refreshCall is not None and self._refreshCall.IsRunning():
 			self._refreshCall.Stop()
 		self._pendingQueryFactory = None
-		self._query = query
-		self._refreshControls()
+		self._applyDialogState(self._buildDialogState(query))
 
 	def _scheduleQuery(self, queryFactory: Callable[[], CalendarQuery]) -> None:
 		self._pendingQueryFactory = queryFactory
@@ -553,6 +634,8 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 		return value
 
 	def _commitGregorianYear(self) -> None:
+		if self._query is None:
+			return
 		currentYear: int = self._query.solarTime.get_year()
 		year: int = self._normalizeYearComboValue(
 			self.solarYearCtrl,
@@ -563,6 +646,8 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 			self._refreshGregorianQuery()
 
 	def _commitLunarYear(self) -> None:
+		if self._query is None:
+			return
 		lunarYear: int = self._query.solarTime.get_solar_day().get_lunar_day().get_lunar_month().get_year()
 		year: int = self._normalizeYearComboValue(self.lunarYearCtrl, getLunarYearChoices(), lunarYear)
 		if year != lunarYear:
@@ -579,8 +664,9 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 			return values[0]
 		return default
 
-	def _reportUpdateError(self) -> None:
-		log.exception("Error updating leanCalendar dialog")
+	def _reportUpdateError(self, shouldLog: bool = True) -> None:
+		if shouldLog:
+			log.exception("Error updating leanCalendar dialog")
 		# Translators: Error message shown when the leanCalendar dialog cannot update its date.
 		ui.message(_("Unable to update leanCalendar."))
 
