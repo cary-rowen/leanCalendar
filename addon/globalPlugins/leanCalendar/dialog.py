@@ -298,7 +298,9 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 		if not self._isAlive() or self._initialLoadThread is not None:
 			return
 		self._initialLoadThread = Thread(
-			target=self._loadInitialState, name="leanCalendarInitialLoad", daemon=True
+			target=self._loadInitialState,
+			name="leanCalendarInitialLoad",
+			daemon=True,
 		)
 		self._initialLoadThread.start()
 

@@ -124,7 +124,12 @@ def clampSolarTimeToQueryRange(solarTime: SolarTime) -> SolarTime:
 	if _solarDayKey(solarDay) > _solarDayKey(getMaxQuerySolarDay()):
 		maxSolarDay: SolarDay = getMaxQuerySolarDay()
 		return createSolarTime(
-			maxSolarDay.get_year(), maxSolarDay.get_month(), maxSolarDay.get_day(), 23, 59, 59
+			maxSolarDay.get_year(),
+			maxSolarDay.get_month(),
+			maxSolarDay.get_day(),
+			23,
+			59,
+			59,
 		)
 	return solarTime
 
@@ -348,7 +353,7 @@ def _formatLunarHourLuck(lunarDay: LunarDay) -> str:
 def _buildGregorianLines(solarTime: SolarTime) -> list[str]:
 	solarDay: SolarDay = solarTime.get_solar_day()
 	dayStatus: str | None = formats.getGregorianHolidaySummary(solarTime) or formats.getGregorianDayStatus(
-		solarDay
+		solarDay,
 	)
 	summaryParts: list[str] = [
 		formats.formatSolarDateHour(solarTime),

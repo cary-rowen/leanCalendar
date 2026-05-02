@@ -49,7 +49,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		description=_(
 			"Report Chinese lunar calendar information. Press once for concise lunar date and solar term "
 			"details, press twice for additional lunar context, or press three times to open the "
-			"leanCalendar query dialog"
+			"leanCalendar query dialog",
 		),
 		gesture="kb:NVDA+f11",
 		speakOnDemand=True,
@@ -72,7 +72,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		# Translators: Describes a command in Input Help mode and the Input Gestures dialog.
 		description=_(
 			"Report Gregorian date and time information. Press once for the current time, or press twice "
-			"for Gregorian date details"
+			"for Gregorian date details",
 		),
 		gesture="kb:NVDA+f12",
 		speakOnDemand=True,
