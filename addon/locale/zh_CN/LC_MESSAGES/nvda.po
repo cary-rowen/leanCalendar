@@ -186,7 +186,7 @@ msgstr "黄历"
 #: addon\globalPlugins\leanCalendar\dialog.py:75
 #: addon\globalPlugins\leanCalendar\__init__.py:45 buildVars.py:26
 msgid "leanCalendar"
-msgstr "历历在目-万年历"
+msgstr "简易万年历"
 
 #. Translators: Basic tab in the leanCalendar dialog.
 #: addon\globalPlugins\leanCalendar\dialog.py:116
@@ -256,7 +256,7 @@ msgstr "节气(&S):"
 #. Translators: Error message shown when the leanCalendar dialog cannot update its date.
 #: addon\globalPlugins\leanCalendar\dialog.py:585
 msgid "Unable to update leanCalendar."
-msgstr "无法更新历历在目-万年历。"
+msgstr "无法更新简易万年历。"
 
 #. Translators: Reports a 30-day lunar month. {month} is the lunar month name.
 #: addon\globalPlugins\leanCalendar\formats.py:33
@@ -412,7 +412,7 @@ msgstr "{year}年，{month}月，{day}日，{hour}时"
 #. Translators: Error message shown when the leanCalendar dialog cannot be opened.
 #: addon\globalPlugins\leanCalendar\__init__.py:36
 msgid "Unable to open leanCalendar."
-msgstr "无法打开历历在目-万年历。"
+msgstr "无法打开简易万年历。"
 
 #: addon\globalPlugins\leanCalendar\__init__.py:50
 msgid ""
@@ -421,7 +421,7 @@ msgid ""
 "three times to open the leanCalendar query dialog"
 msgstr ""
 "读出农历信息。按一次读出简要农历日期和节气信息，连按两次读出更多农历上下文，"
-"连按三次打开历历在目-万年历查询对话框"
+"连按三次打开简易万年历查询对话框"
 
 #. Translators: Error message shown when lunar date or solar term calculation fails.
 #: addon\globalPlugins\leanCalendar\__init__.py:69
