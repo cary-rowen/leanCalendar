@@ -7,6 +7,7 @@ leanCalendar is an NVDA add-on for quickly reporting Chinese lunar calendar, sol
 * `NVDA+F11`: report Chinese lunar calendar and solar term information.
 * Press `NVDA+F11` twice: report additional lunar and almanac context.
 * Press `NVDA+F11` three times: open the leanCalendar query dialog.
+* An unassigned command is available in Input Gestures to open the leanCalendar query dialog directly.
 * `NVDA+F12`: report the current Gregorian time.
 * Press `NVDA+F12` twice: report Gregorian date details.
 

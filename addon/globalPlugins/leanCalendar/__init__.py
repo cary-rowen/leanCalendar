@@ -87,3 +87,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			log.exception("Error reporting Gregorian time and calendar details")
 			# Translators: Error message shown when Gregorian time or calendar calculation fails.
 			ui.message(_("Unable to calculate the Gregorian time and calendar details."))
+
+	@script(
+		# Translators: Describes a command in Input Help mode and the Input Gestures dialog.
+		description=_("Open the leanCalendar query dialog."),
+	)
+	def script_openCalendarQueryDialog(self, gesture: InputGesture) -> None:
+		_openCalendarDialog()

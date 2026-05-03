@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: leanCalendar 0.1.0\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2026-05-03 13:52+0800\n"
+"POT-Creation-Date: 2026-05-03 14:26+0800\n"
 "PO-Revision-Date: 2026-05-02 20:17+0800\n"
 "Last-Translator: Cary-rowen <manchen_0528@outlook.com>\n"
 "Language-Team: Chinese (Simplified)\n"
@@ -532,6 +532,11 @@ msgstr "读出公历日期和时间信息。按一次读出当前时间，连按
 #: addon\globalPlugins\leanCalendar\__init__.py:89
 msgid "Unable to calculate the Gregorian time and calendar details."
 msgstr "无法计算公历时间和日历信息。"
+
+#. Translators: Describes a command in Input Help mode and the Input Gestures dialog.
+#: addon\globalPlugins\leanCalendar\__init__.py:93
+msgid "Open the leanCalendar query dialog."
+msgstr "打开简易万年历查询对话框。"
 
 #: buildVars.py:30
 msgid ""
