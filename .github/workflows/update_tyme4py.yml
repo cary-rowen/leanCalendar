@@ -146,6 +146,8 @@ jobs:
         if [ -z "${currentVersion}" ]; then
           currentVersion="${{ steps.release.outputs.current_commit }}"
         fi
+        compareUrl="https://github.com/6tail/tyme4py/compare/${{ steps.release.outputs.current_commit }}...${{ steps.release.outputs.latest_tag }}"
+        releaseBody="$(gh api repos/6tail/tyme4py/releases/latest --jq '.body // empty')"
 
         prNumber="$(gh pr list --head "${branch}" --state open --json number --jq '.[0].number // empty')"
         if [ -z "${prNumber}" ]; then
@@ -154,8 +156,27 @@ jobs:
         Updates the bundled \`addon/tyme4py\` submodule from \`${currentVersion}\` to \`${{ steps.release.outputs.latest_tag }}\`.
 
         Upstream release: ${{ steps.release.outputs.release_url }}
+        Compare: ${compareUrl}
 
-        This PR is created as a draft. The workflow waits for the repository CI checks to pass before marking it ready for review and merge.
+        ## Upstream Notes
+        EOF
+          if [ -n "${releaseBody}" ]; then
+            printf '%s\n' "${releaseBody}" >> "${bodyFile}"
+          else
+            printf '%s\n' "No upstream release notes were provided." >> "${bodyFile}"
+          fi
+          cat >> "${bodyFile}" <<EOF
+
+        ## Safety Check
+
+        This PR only updates the \`addon/tyme4py\` submodule pointer.
+
+        Before this PR is marked ready, CI must pass:
+
+        - \`build\`
+        - \`tests\`
+
+        If \`tests\` passes, no breaking impact was detected for the \`tyme4py\` API surface currently used by leanCalendar.
         EOF
           gh pr create \
             --draft \
@@ -188,12 +209,12 @@ jobs:
         set -euo pipefail
 
         requiredChecks=(
-          "build addon / build"
-          "tyme4py contract / tests"
+          "build"
+          "tests"
         )
 
         for attempt in $(seq 1 30); do
-          checks="$(gh pr checks "${{ steps.pr.outputs.number }}" --json name,workflow --jq '.[] | "\(.workflow) / \(.name)"' || true)"
+          checks="$(gh pr checks "${{ steps.pr.outputs.number }}" --json name --jq '.[].name' || true)"
           missingChecks=()
           for requiredCheck in "${requiredChecks[@]}"; do
             if ! grep -Fxq "${requiredCheck}" <<< "${checks}"; then
