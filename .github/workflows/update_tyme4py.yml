@@ -1,0 +1,220 @@
+name: update tyme4py
+
+on:
+  schedule:
+    # GitHub schedules use UTC. This runs daily in the early morning for Asia/Shanghai.
+    - cron: "17 19 * * *"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-tyme4py
+  cancel-in-progress: true
+
+jobs:
+  update:
+    if: github.repository != 'nvaccess/addonTemplate'
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Verify automation token
+      env:
+        AUTOMATION_TOKEN: ${{ secrets.LEANCALENDAR_AUTOMATION_TOKEN }}
+      run: |
+        set -euo pipefail
+
+        if [ -z "${AUTOMATION_TOKEN}" ]; then
+          cat <<'EOF'
+        Missing required repository secret: LEANCALENDAR_AUTOMATION_TOKEN.
+
+        Use a fine-grained PAT or GitHub App installation token that can write
+        repository contents, create pull requests, and read PR checks. The
+        built-in GITHUB_TOKEN is intentionally not used for the update branch
+        because workflow events created with GITHUB_TOKEN do not trigger the PR
+        CI checks that gate this dependency update.
+        EOF
+          exit 1
+        fi
+
+    - name: Checkout repo
+      uses: actions/checkout@v6
+      with:
+        token: ${{ secrets.LEANCALENDAR_AUTOMATION_TOKEN }}
+        fetch-depth: 0
+        submodules: recursive
+
+    - name: Check latest tyme4py release
+      id: release
+      env:
+        GH_TOKEN: ${{ secrets.LEANCALENDAR_AUTOMATION_TOKEN }}
+      run: |
+        set -euo pipefail
+
+        git -C addon/tyme4py fetch --tags origin
+
+        latestTag="$(gh api repos/6tail/tyme4py/releases/latest --jq '.tag_name')"
+        releaseUrl="$(gh api repos/6tail/tyme4py/releases/latest --jq '.html_url')"
+        latestCommit="$(git -C addon/tyme4py rev-parse "${latestTag}^{commit}")"
+        currentCommit="$(git -C addon/tyme4py rev-parse HEAD)"
+        currentTag="$(git -C addon/tyme4py describe --tags --exact-match HEAD 2>/dev/null || true)"
+        safeTag="$(printf '%s' "${latestTag}" | tr -c 'A-Za-z0-9._-' '-')"
+
+        {
+          echo "latest_tag=${latestTag}"
+          echo "release_url=${releaseUrl}"
+          echo "latest_commit=${latestCommit}"
+          echo "current_commit=${currentCommit}"
+          echo "current_tag=${currentTag}"
+          echo "safe_tag=${safeTag}"
+        } >> "${GITHUB_OUTPUT}"
+
+        if [ "${currentCommit}" = "${latestCommit}" ]; then
+          echo "needs_update=false" >> "${GITHUB_OUTPUT}"
+          echo "tyme4py is already at ${latestTag}."
+          exit 0
+        fi
+
+        echo "needs_update=true" >> "${GITHUB_OUTPUT}"
+        echo "tyme4py update available: ${currentTag:-${currentCommit}} -> ${latestTag}"
+
+    - name: Update submodule pointer
+      id: update
+      if: steps.release.outputs.needs_update == 'true'
+      run: |
+        set -euo pipefail
+
+        defaultBranch="$(git remote show origin | sed -n 's/.*HEAD branch: //p')"
+        branch="automation/update-tyme4py-${{ steps.release.outputs.safe_tag }}"
+
+        if git ls-remote --exit-code --heads origin "${branch}" > /dev/null 2>&1; then
+          git fetch origin "${branch}:refs/remotes/origin/${branch}"
+          branchSubmoduleCommit="$(git ls-tree "origin/${branch}" addon/tyme4py | awk '{print $3}')"
+          if [ "${branchSubmoduleCommit}" = "${{ steps.release.outputs.latest_commit }}" ]; then
+            git switch -C "${branch}" "origin/${branch}"
+            {
+              echo "branch=${branch}"
+              echo "default_branch=${defaultBranch}"
+              echo "changed=false"
+            } >> "${GITHUB_OUTPUT}"
+            echo "${branch} already points at ${{ steps.release.outputs.latest_tag }}."
+            exit 0
+          fi
+        fi
+
+        git switch -C "${branch}" "origin/${defaultBranch}"
+        git -C addon/tyme4py checkout --detach "${{ steps.release.outputs.latest_tag }}"
+        git add addon/tyme4py
+
+        stagedFiles="$(git diff --cached --name-only)"
+        if [ "${stagedFiles}" != "addon/tyme4py" ]; then
+          echo "Unexpected staged files:"
+          printf '%s\n' "${stagedFiles}"
+          exit 1
+        fi
+
+        {
+          echo "branch=${branch}"
+          echo "default_branch=${defaultBranch}"
+          echo "changed=true"
+        } >> "${GITHUB_OUTPUT}"
+
+    - name: Commit and push update branch
+      if: steps.release.outputs.needs_update == 'true' && steps.update.outputs.changed == 'true'
+      run: |
+        set -euo pipefail
+
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git commit -m "Update tyme4py to ${{ steps.release.outputs.latest_tag }}"
+        git push --force-with-lease origin "${{ steps.update.outputs.branch }}"
+
+    - name: Create or update draft PR
+      id: pr
+      if: steps.release.outputs.needs_update == 'true'
+      env:
+        GH_TOKEN: ${{ secrets.LEANCALENDAR_AUTOMATION_TOKEN }}
+      run: |
+        set -euo pipefail
+
+        branch="${{ steps.update.outputs.branch }}"
+        title="Update tyme4py to ${{ steps.release.outputs.latest_tag }}"
+        currentVersion="${{ steps.release.outputs.current_tag }}"
+        if [ -z "${currentVersion}" ]; then
+          currentVersion="${{ steps.release.outputs.current_commit }}"
+        fi
+
+        prNumber="$(gh pr list --head "${branch}" --state open --json number --jq '.[0].number // empty')"
+        if [ -z "${prNumber}" ]; then
+          bodyFile="$(mktemp)"
+          cat > "${bodyFile}" <<EOF
+        Updates the bundled \`addon/tyme4py\` submodule from \`${currentVersion}\` to \`${{ steps.release.outputs.latest_tag }}\`.
+
+        Upstream release: ${{ steps.release.outputs.release_url }}
+
+        This PR is created as a draft. The workflow waits for the repository CI checks to pass before marking it ready for review and merge.
+        EOF
+          gh pr create \
+            --draft \
+            --base "${{ steps.update.outputs.default_branch }}" \
+            --head "${branch}" \
+            --title "${title}" \
+            --body-file "${bodyFile}"
+        fi
+
+        for _ in 1 2 3 4 5; do
+          prNumber="$(gh pr list --head "${branch}" --state open --json number --jq '.[0].number // empty')"
+          if [ -n "${prNumber}" ]; then
+            break
+          fi
+          sleep 2
+        done
+
+        if [ -z "${prNumber}" ]; then
+          echo "Unable to find the update PR for ${branch}."
+          exit 1
+        fi
+
+        echo "number=${prNumber}" >> "${GITHUB_OUTPUT}"
+
+    - name: Mark PR ready after checks pass
+      if: steps.release.outputs.needs_update == 'true'
+      env:
+        GH_TOKEN: ${{ secrets.LEANCALENDAR_AUTOMATION_TOKEN }}
+      run: |
+        set -euo pipefail
+
+        requiredChecks=(
+          "build addon / build"
+          "tyme4py contract / tests"
+        )
+
+        for attempt in $(seq 1 30); do
+          checks="$(gh pr checks "${{ steps.pr.outputs.number }}" --json name,workflow --jq '.[] | "\(.workflow) / \(.name)"' || true)"
+          missingChecks=()
+          for requiredCheck in "${requiredChecks[@]}"; do
+            if ! grep -Fxq "${requiredCheck}" <<< "${checks}"; then
+              missingChecks+=("${requiredCheck}")
+            fi
+          done
+
+          if [ "${#missingChecks[@]}" -eq 0 ]; then
+            break
+          fi
+
+          if [ "${attempt}" -eq 30 ]; then
+            echo "Timed out waiting for required PR checks to appear:"
+            printf '  %s\n' "${missingChecks[@]}"
+            echo "Current checks:"
+            printf '%s\n' "${checks}"
+            exit 1
+          fi
+
+          sleep 10
+        done
+
+        gh pr checks "${{ steps.pr.outputs.number }}" --watch --fail-fast
+        gh pr ready "${{ steps.pr.outputs.number }}"

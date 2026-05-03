@@ -1,0 +1,50 @@
+name: tyme4py contract
+
+on:
+  push:
+    branches: [ main, master ]
+
+  pull_request:
+    branches: [ main, master ]
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    # Building the add-on template as an add-on does not make sense (and fails).
+    # Do not modify this repo name with your own one! (should remain the template)
+    if: github.repository != 'nvaccess/addonTemplate'
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v6
+      with:
+        submodules: recursive
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v7
+      with:
+        enable-cache: true
+
+    - name: Install dependencies
+      run: |
+        uv sync
+
+    - name: Code checks
+      run: export SKIP=no-commit-to-branch,pyright; uv run pre-commit run --all-files
+
+    - name: Syntax check
+      run: uv run python -m compileall addon/globalPlugins/leanCalendar buildVars.py tests
+
+    - name: leanCalendar contract tests
+      run: uv run python -m unittest tests.test_tyme4py_contract -v
+
+    - name: upstream tyme4py tests
+      env:
+        PYTHONPATH: addon/tyme4py
+      run: uv run python -m unittest discover -s addon/tyme4py/test -v
