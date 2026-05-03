@@ -1,5 +1,11 @@
 # leanCalendar Changelog
 
+## 0.2.0
+
+* Richer calendar query results.
+* Added an unassigned command to open the query dialog directly.
+* Fixed focus order in the query dialog.
+
 ## 0.1.2
 
 * Update translation.

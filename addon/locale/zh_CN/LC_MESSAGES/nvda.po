@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: leanCalendar 0.1.0\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2026-05-03 14:26+0800\n"
+"POT-Creation-Date: 2026-05-03 20:09+0800\n"
 "PO-Revision-Date: 2026-05-02 20:17+0800\n"
 "Last-Translator: Cary-rowen <manchen_0528@outlook.com>\n"
 "Language-Team: Chinese (Simplified)\n"
@@ -271,72 +271,72 @@ msgid "leanCalendar"
 msgstr "简易万年历"
 
 #. Translators: Basic tab in the leanCalendar dialog.
-#: addon\globalPlugins\leanCalendar\dialog.py:137
+#: addon\globalPlugins\leanCalendar\dialog.py:138
 msgid "Basic"
 msgstr "基本"
 
 #. Translators: Label for the Basic tab result.
-#: addon\globalPlugins\leanCalendar\dialog.py:173
+#: addon\globalPlugins\leanCalendar\dialog.py:174
 msgid "&Result:"
 msgstr "结果(&R):"
 
 #. Translators: Label for the calendar query controls group.
-#: addon\globalPlugins\leanCalendar\dialog.py:183
+#: addon\globalPlugins\leanCalendar\dialog.py:185
 msgid "Query"
 msgstr "查询"
 
 #. Translators: Label for Gregorian year query controls.
-#: addon\globalPlugins\leanCalendar\dialog.py:190
+#: addon\globalPlugins\leanCalendar\dialog.py:192
 msgid "Gregorian &year:"
 msgstr "公历年(&Y):"
 
 #. Translators: Label for Gregorian month query controls.
-#: addon\globalPlugins\leanCalendar\dialog.py:197
+#: addon\globalPlugins\leanCalendar\dialog.py:199
 msgid "Gregorian &month:"
 msgstr "公历月(&M):"
 
 #. Translators: Label for Gregorian day query controls.
-#: addon\globalPlugins\leanCalendar\dialog.py:203
+#: addon\globalPlugins\leanCalendar\dialog.py:205
 msgid "Gregorian &day:"
 msgstr "公历日(&D):"
 
 #. Translators: Label for Gregorian hour query controls.
-#: addon\globalPlugins\leanCalendar\dialog.py:209
+#: addon\globalPlugins\leanCalendar\dialog.py:211
 msgid "Gregorian &hour:"
 msgstr "公历时(&H):"
 
 #. Translators: Button that resets the calendar query to the current date and time.
-#: addon\globalPlugins\leanCalendar\dialog.py:216
+#: addon\globalPlugins\leanCalendar\dialog.py:218
 msgid "&Today"
 msgstr "回到今天(&T)"
 
 #. Translators: Label for lunar year query controls.
-#: addon\globalPlugins\leanCalendar\dialog.py:224
+#: addon\globalPlugins\leanCalendar\dialog.py:226
 msgid "Lunar y&ear:"
 msgstr "农历年(&E):"
 
 #. Translators: Label for lunar month query controls.
-#: addon\globalPlugins\leanCalendar\dialog.py:231
+#: addon\globalPlugins\leanCalendar\dialog.py:233
 msgid "Lunar mo&nth:"
 msgstr "农历月(&N):"
 
 #. Translators: Label for lunar day query controls.
-#: addon\globalPlugins\leanCalendar\dialog.py:237
+#: addon\globalPlugins\leanCalendar\dialog.py:239
 msgid "Lunar d&ay:"
 msgstr "农历日(&A):"
 
 #. Translators: Label for lunar hour query controls.
-#: addon\globalPlugins\leanCalendar\dialog.py:243
+#: addon\globalPlugins\leanCalendar\dialog.py:245
 msgid "Lunar h&our:"
 msgstr "时辰(&O):"
 
 #. Translators: Label for solar term query controls.
-#: addon\globalPlugins\leanCalendar\dialog.py:252
+#: addon\globalPlugins\leanCalendar\dialog.py:254
 msgid "&Solar term:"
 msgstr "节气(&S):"
 
 #. Translators: Error message shown when the leanCalendar dialog cannot update its date.
-#: addon\globalPlugins\leanCalendar\dialog.py:673
+#: addon\globalPlugins\leanCalendar\dialog.py:684
 msgid "Unable to update leanCalendar."
 msgstr "无法更新简易万年历。"
 
@@ -547,10 +547,32 @@ msgstr ""
 
 #: buildVars.py:37
 msgid ""
-"### 0.1.2\n"
+"### 0.2.0\n"
 "\n"
-"Update translation."
+"* Richer calendar query results.\n"
+"* Added an unassigned command to open the query dialog directly.\n"
+"* Fixed focus order in the query dialog."
 msgstr ""
-"### 0.1.2\n"
+"### 0.2.0\n"
 "\n"
-"更新翻译。"
+"* 更丰富的查询结果。\n"
+"* 新增一个未分配手势，可直接打开查询对话框。\n"
+"* 修复查询对话框的焦点顺序。"
+
+#~ msgid ""
+#~ "### 0.2.0\n"
+#~ "\n"
+#~ "Richer query results, direct query command, and focus order fix."
+#~ msgstr ""
+#~ "### 0.2.0\n"
+#~ "\n"
+#~ "更丰富的查询结果、直接打开查询对话框的命令，以及焦点顺序修复。"
+
+#~ msgid ""
+#~ "### 0.1.2\n"
+#~ "\n"
+#~ "Update translation."
+#~ msgstr ""
+#~ "### 0.1.2\n"
+#~ "\n"
+#~ "更新翻译。"
