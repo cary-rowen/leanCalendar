@@ -81,6 +81,15 @@ def formatSolarDateTime(solarTime: SolarTime) -> str:
 	return f"{solarTime.get_year():04d}-{solarTime.get_month():02d}-{solarTime.get_day():02d} {formatSolarTimeOnly(solarTime)}"
 
 
+def formatSolarMonthDayTime(solarTime: SolarTime) -> str:
+	# Translators: Gregorian month, day, and time. {time} is HH:MM:SS.
+	return _("{month}-{day} {time}").format(
+		month=solarTime.get_month(),
+		day=solarTime.get_day(),
+		time=formatSolarTimeOnly(solarTime),
+	)
+
+
 def formatSolarTermCompact(solarTerm: SolarTerm) -> str:
 	solarTime: SolarTime = solarTerm.get_julian_day().get_solar_time()
 	return f"{formatLunarDateCompact(solarTime.get_solar_day().get_lunar_day())}{solarTerm.get_name()}"

@@ -26,8 +26,9 @@ from .tymeAccess import (
 addonHandler.initTranslation()
 
 if TYPE_CHECKING:
-	from tyme4py.lunar import LunarDay, LunarHour, LunarMonth
-	from tyme4py.solar import SolarDay, SolarTime
+	from tyme4py.culture.phenology import PhenologyDay
+	from tyme4py.lunar import LunarDay, LunarHour, LunarMonth, LunarYear
+	from tyme4py.solar import SolarDay, SolarTerm, SolarTime
 
 
 @dataclass(frozen=True)
@@ -238,10 +239,113 @@ def _formatFourPillars(lunarDay: LunarDay, lunarHour: LunarHour) -> str:
 	)
 
 
-def _formatFullMoonTime(lunarMonth: LunarMonth) -> str:
-	fullMoon = createPhase(lunarMonth.get_year(), lunarMonth.get_month_with_leap(), 4)
-	# Translators: Report item for the full moon time. {time} is the time of day.
-	return _("full moon at {time}").format(time=formats.formatSolarTimeOnly(fullMoon.get_solar_time()))
+def _formatNameWithTime(name: str, solarTime: SolarTime) -> str:
+	# Translators: Calendar item followed by Gregorian month-day and time.
+	return _("{name}: {dateTime}").format(
+		name=name,
+		dateTime=formats.formatSolarMonthDayTime(solarTime),
+	)
+
+
+def _formatMoonPhaseTimes(lunarMonth: LunarMonth) -> str:
+	phaseItems: list[str] = []
+	for phaseIndex, phaseName in (
+		(0, _("new moon")),
+		(2, _("first quarter")),
+		(4, _("full moon")),
+		(6, _("last quarter")),
+	):
+		phase = createPhase(lunarMonth.get_year(), lunarMonth.get_month_with_leap(), phaseIndex)
+		phaseItems.append(
+			_("{phase}: {dateTime}").format(
+				phase=phaseName,
+				dateTime=formats.formatSolarMonthDayTime(phase.get_solar_time()),
+			),
+		)
+	# Translators: Summary of the main moon phases in the query result.
+	return _("Moon phases {items}").format(items=formats.joinParts(phaseItems))
+
+
+def _formatLeapMonthName(lunarYear: LunarYear) -> str:
+	leapMonth: int = lunarYear.get_leap_month()
+	if leapMonth < 1:
+		# Translators: Lunar year summary when there is no leap month.
+		return _("no leap month")
+	for lunarMonth in lunarYear.get_months():
+		if lunarMonth.get_month_with_leap() == leapMonth:
+			# Translators: Lunar year summary for the leap month. {month} is the lunar month name.
+			return _("leap month {month}").format(month=lunarMonth.get_name())
+	return _("no leap month")
+
+
+def _formatLunarMonthRange(lunarMonth: LunarMonth) -> str:
+	startSolarDay: SolarDay = lunarMonth.get_first_julian_day().get_solar_day()
+	endSolarDay: SolarDay = (
+		lunarMonth.get_first_julian_day().next(lunarMonth.get_day_count() - 1).get_solar_day()
+	)
+	# Translators: Lunar month range in the query result. {month} is the lunar month name.
+	return _("Lunar {month}: {start} to {end}").format(
+		month=lunarMonth.get_name(),
+		start=formats.formatSolarDate(startSolarDay),
+		end=formats.formatSolarDate(endSolarDay),
+	)
+
+
+def _formatLunarYearSummary(lunarYear: LunarYear) -> str:
+	# Translators: Lunar year overview in the query result.
+	return _("Lunar year: {monthCount} months, {dayCount} days, {leapMonth}").format(
+		monthCount=lunarYear.get_month_count(),
+		dayCount=lunarYear.get_day_count(),
+		leapMonth=_formatLeapMonthName(lunarYear),
+	)
+
+
+def _formatNextPhenology(phenologyDay: PhenologyDay) -> str:
+	nextPhenology = phenologyDay.get_phenology().next(1)
+	# Translators: Next three-phenology item in the query result. {phenology} is the next phenology name.
+	return _("next phenology {phenology}").format(phenology=nextPhenology)
+
+
+def _formatHiddenStemDay(solarDay: SolarDay) -> str:
+	hiddenStemDay = solarDay.get_hide_heaven_stem_day()
+	# Translators: Hidden stem day item in the query result. {day} is a tyme4py hidden stem day value.
+	return _("Hidden stem {day}").format(day=hiddenStemDay)
+
+
+def _formatCurrentLunarHour(lunarHour: LunarHour) -> str:
+	twelveStar = lunarHour.get_twelve_star()
+	ecliptic = twelveStar.get_ecliptic()
+	# Translators: Selected lunar hour detail in the query result.
+	return _(
+		"Lunar hour {hour}: {twelveStar}-{ecliptic}-{luck}, NineStar {nineStar}, Xiao Liu Ren {minorRen}",
+	).format(
+		hour=lunarHour.get_name(),
+		twelveStar=twelveStar,
+		ecliptic=ecliptic,
+		luck=ecliptic.get_luck(),
+		nineStar=lunarHour.get_nine_star(),
+		minorRen=lunarHour.get_minor_ren(),
+	)
+
+
+def _formatHourYi(lunarHour: LunarHour) -> str | None:
+	recommends: list[str] = [str(recommend) for recommend in lunarHour.get_recommends()]
+	if not recommends:
+		return None
+	# Translators: Lunar hour suitable activities in the query result.
+	return _("Hour Yi {items}").format(items=formats.joinLimitedParts(recommends, limit=12))
+
+
+def _formatHourJi(lunarHour: LunarHour) -> str | None:
+	avoids: list[str] = [str(avoid) for avoid in lunarHour.get_avoids()]
+	if not avoids:
+		return None
+	# Translators: Lunar hour activities to avoid in the query result.
+	return _("Hour Ji {items}").format(items=formats.joinLimitedParts(avoids, limit=12))
+
+
+def _isSameSolarTerm(left: SolarTerm, right: SolarTerm) -> bool:
+	return left.get_year() == right.get_year() and left.get_index() == right.get_index()
 
 
 def _formatYi(lunarDay: LunarDay) -> str | None:
@@ -380,6 +484,7 @@ def _buildLunarLines(solarTime: SolarTime) -> list[str]:
 	lunarDay: LunarDay = solarDay.get_lunar_day()
 	lunarMonth: LunarMonth = lunarDay.get_lunar_month()
 	lunarHour: LunarHour = solarTime.get_lunar_hour()
+	lunarYear: LunarYear = lunarMonth.get_lunar_year()
 	zodiacText: str = str(lunarMonth.get_lunar_year().get_sixty_cycle().get_earth_branch().get_zodiac())
 	dateParts: list[str] = [
 		formats.formatLunarDate(lunarDay),
@@ -394,6 +499,9 @@ def _buildLunarLines(solarTime: SolarTime) -> list[str]:
 	return [
 		formats.joinParts(dateParts),
 		_formatFourPillars(lunarDay, lunarHour),
+		"",
+		_formatLunarMonthRange(lunarMonth),
+		_formatLunarYearSummary(lunarYear),
 	]
 
 
@@ -406,17 +514,28 @@ def _buildSolarTermLines(solarTime: SolarTime) -> list[str]:
 	phenologyDay = solarDay.get_phenology_day()
 	threePhenology = phenologyDay.get_phenology().get_three_phenology()
 	termParts: list[str] = [
-		formats.formatSolarTermCompact(previousJie),
-		formats.formatSolarTermCompact(nextJie),
+		_formatNameWithTime(
+			formats.formatSolarTermCompact(previousJie),
+			previousJie.get_julian_day().get_solar_time(),
+		),
+	]
+	if not _isSameSolarTerm(previousJie, currentTerm) and not _isSameSolarTerm(nextJie, currentTerm):
+		termParts.append(
+			_formatNameWithTime(currentTerm.get_name(), currentTerm.get_julian_day().get_solar_time()),
+		)
+	termParts.append(_formatNameWithTime(formats.formatSolarTermCompact(nextJie), nextJieTime))
+	termParts.append(
 		# Translators: Report item for time remaining until the next solar term.
 		_("until {term} {remaining}").format(
 			term=nextJie.get_name(),
 			remaining=formats.formatSecondsUntil(nextJieTime.subtract(solarTime)),
 		),
-	]
+	)
 	phenologyParts: list[str] = [
 		formats.formatSolarTermDay(solarDay),
 		f"{threePhenology} {phenologyDay}",
+		_formatNextPhenology(phenologyDay),
+		_formatHiddenStemDay(solarDay),
 	]
 	phenologyParts.extend(formats.getTraditionalPeriodSummaries(solarDay))
 	return [formats.joinParts(phenologyParts), formats.joinParts(termParts)]
@@ -425,9 +544,8 @@ def _buildSolarTermLines(solarTime: SolarTime) -> list[str]:
 def _buildAlmanacLines(solarTime: SolarTime) -> list[str]:
 	solarDay: SolarDay = solarTime.get_solar_day()
 	lunarDay: LunarDay = solarDay.get_lunar_day()
-	lunarMonth: LunarMonth = lunarDay.get_lunar_month()
+	lunarHour: LunarHour = solarTime.get_lunar_hour()
 	coreParts: list[str] = [
-		_formatFullMoonTime(lunarMonth),
 		formats.getPhaseDaySummary(solarDay),
 		# Translators: Jianchu duty item, matching tyme4py's Duty type.
 		_("Jianchu duty {duty}").format(duty=lunarDay.get_duty()),
@@ -467,6 +585,7 @@ def _buildAlmanacLines(solarTime: SolarTime) -> list[str]:
 	activityParts: list[str] = [part for part in (_formatYi(lunarDay), _formatJi(lunarDay)) if part]
 	lines: list[str] = [
 		formats.joinParts(coreParts),
+		_formatMoonPhaseTimes(lunarDay.get_lunar_month()),
 		formats.joinParts(starCoreParts),
 		formats.joinParts(starExtraParts),
 		"",
@@ -479,6 +598,13 @@ def _buildAlmanacLines(solarTime: SolarTime) -> list[str]:
 	if activityParts:
 		lines.append("")
 		lines.extend(activityParts)
+	lines.append("")
+	lines.append(_formatCurrentLunarHour(lunarHour))
+	hourActivityParts: list[str] = [
+		part for part in (_formatHourYi(lunarHour), _formatHourJi(lunarHour)) if part
+	]
+	if hourActivityParts:
+		lines.append(formats.joinParts(hourActivityParts))
 	lines.append("")
 	lines.append(_formatLunarHourLuck(lunarDay))
 	return lines

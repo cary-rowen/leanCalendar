@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: leanCalendar 0.1.0\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2026-05-03 02:39+0800\n"
+"POT-Creation-Date: 2026-05-03 13:52+0800\n"
 "PO-Revision-Date: 2026-05-02 20:17+0800\n"
 "Last-Translator: Cary-rowen <manchen_0528@outlook.com>\n"
 "Language-Team: Chinese (Simplified)\n"
@@ -18,38 +18,120 @@ msgstr ""
 
 #. Translators: Solar term choice in the query controls. {term} is the solar term name,
 #. and {dateTime} is its Gregorian date and time.
-#: addon\globalPlugins\leanCalendar\data.py:209
+#: addon\globalPlugins\leanCalendar\data.py:210
 #, python-brace-format
 msgid "{term} {dateTime}"
 msgstr "{term} {dateTime}"
 
 #. Translators: Summary at the top of the leanCalendar dialog.
-#: addon\globalPlugins\leanCalendar\data.py:224
+#: addon\globalPlugins\leanCalendar\data.py:225
 #, python-brace-format
 msgid "{dateTime} | Lunar {lunarDate} | {solarTermDay}"
 msgstr "{dateTime} | 农历 {lunarDate} | {solarTermDay}"
 
-#. Translators: Report item for the full moon time. {time} is the time of day.
+#. Translators: Calendar item followed by Gregorian month-day and time.
 #: addon\globalPlugins\leanCalendar\data.py:244
-#: addon\globalPlugins\leanCalendar\messages.py:77
 #, python-brace-format
-msgid "full moon at {time}"
-msgstr "望 {time}"
+msgid "{name}: {dateTime}"
+msgstr "{name}：{dateTime}"
+
+#: addon\globalPlugins\leanCalendar\data.py:253
+msgid "new moon"
+msgstr "朔"
+
+#: addon\globalPlugins\leanCalendar\data.py:254
+msgid "first quarter"
+msgstr "上弦"
+
+#: addon\globalPlugins\leanCalendar\data.py:255
+msgid "full moon"
+msgstr "望"
+
+#: addon\globalPlugins\leanCalendar\data.py:256
+msgid "last quarter"
+msgstr "下弦"
+
+#: addon\globalPlugins\leanCalendar\data.py:260
+#, python-brace-format
+msgid "{phase}: {dateTime}"
+msgstr "{phase}：{dateTime}"
+
+#. Translators: Summary of the main moon phases in the query result.
+#: addon\globalPlugins\leanCalendar\data.py:266
+#, python-brace-format
+msgid "Moon phases {items}"
+msgstr "月相时刻 {items}"
+
+#. Translators: Lunar year summary when there is no leap month.
+#: addon\globalPlugins\leanCalendar\data.py:273
+#: addon\globalPlugins\leanCalendar\data.py:278
+msgid "no leap month"
+msgstr "无闰月"
+
+#. Translators: Lunar year summary for the leap month. {month} is the lunar month name.
+#: addon\globalPlugins\leanCalendar\data.py:277
+#, python-brace-format
+msgid "leap month {month}"
+msgstr "闰{month}"
+
+#. Translators: Lunar month range in the query result. {month} is the lunar month name.
+#: addon\globalPlugins\leanCalendar\data.py:287
+#, python-brace-format
+msgid "Lunar {month}: {start} to {end}"
+msgstr "农历{month}：{start}至{end}"
+
+#. Translators: Lunar year overview in the query result.
+#: addon\globalPlugins\leanCalendar\data.py:296
+#, python-brace-format
+msgid "Lunar year: {monthCount} months, {dayCount} days, {leapMonth}"
+msgstr "农历年：{monthCount}个月，{dayCount}天，{leapMonth}"
+
+#. Translators: Next three-phenology item in the query result. {phenology} is the next phenology name.
+#: addon\globalPlugins\leanCalendar\data.py:306
+#, python-brace-format
+msgid "next phenology {phenology}"
+msgstr "下一候 {phenology}"
+
+#. Translators: Hidden stem day item in the query result. {day} is a tyme4py hidden stem day value.
+#: addon\globalPlugins\leanCalendar\data.py:312
+#, python-brace-format
+msgid "Hidden stem {day}"
+msgstr "人元 {day}"
+
+#: addon\globalPlugins\leanCalendar\data.py:320
+#, python-brace-format
+msgid ""
+"Lunar hour {hour}: {twelveStar}-{ecliptic}-{luck}, NineStar {nineStar}, Xiao "
+"Liu Ren {minorRen}"
+msgstr ""
+"{hour}：{twelveStar}-{ecliptic}-{luck}，九星 {nineStar}，小六壬 {minorRen}"
+
+#. Translators: Lunar hour suitable activities in the query result.
+#: addon\globalPlugins\leanCalendar\data.py:336
+#, python-brace-format
+msgid "Hour Yi {items}"
+msgstr "时宜 {items}"
+
+#. Translators: Lunar hour activities to avoid in the query result.
+#: addon\globalPlugins\leanCalendar\data.py:344
+#, python-brace-format
+msgid "Hour Ji {items}"
+msgstr "时忌 {items}"
 
 #. Translators: Huangli Yi item, listing suitable activities for the day.
-#: addon\globalPlugins\leanCalendar\data.py:252
+#: addon\globalPlugins\leanCalendar\data.py:356
 #, python-brace-format
 msgid "Yi {items}"
 msgstr "宜 {items}"
 
 #. Translators: Huangli Ji item, listing activities to avoid for the day.
-#: addon\globalPlugins\leanCalendar\data.py:260
+#: addon\globalPlugins\leanCalendar\data.py:364
 #, python-brace-format
 msgid "Ji {items}"
 msgstr "忌 {items}"
 
 #. Translators: Cardinal direction. {direction} is one of east, south, west, or north.
-#: addon\globalPlugins\leanCalendar\data.py:266
+#: addon\globalPlugins\leanCalendar\data.py:370
 #, python-brace-format
 msgid "due {direction}"
 msgstr "正{direction}"
@@ -57,124 +139,124 @@ msgstr "正{direction}"
 #. Translators: Huangli Chong Sha item.
 #. {dayZodiac} and {targetZodiac} are Chinese zodiac names, {targetCycle} is a sexagenary cycle,
 #. and {direction} is a Sha direction.
-#: addon\globalPlugins\leanCalendar\data.py:279
+#: addon\globalPlugins\leanCalendar\data.py:383
 #, python-brace-format
 msgid "{dayZodiac} day chong {targetZodiac} ({targetCycle}), sha {direction}"
 msgstr "{dayZodiac}日冲{targetZodiac}({targetCycle}) 煞{direction}"
 
 #. Translators: Almanac five elements item.
 #. {stemElement}, {branchElement}, and {sound} are Chinese five-element or Na Yin names.
-#: addon\globalPlugins\leanCalendar\data.py:291
+#: addon\globalPlugins\leanCalendar\data.py:395
 #, python-brace-format
 msgid "five elements {stemElement}{branchElement} {sound}"
 msgstr "五行 {stemElement}{branchElement} {sound}"
 
 #. Translators: TwentyEightStar detail item, matching tyme4py's TwentyEightStar type.
 #. {zone}, {star}, {sevenStar}, {animal}, and {luck} are Chinese astrology names.
-#: addon\globalPlugins\leanCalendar\data.py:302
+#: addon\globalPlugins\leanCalendar\data.py:406
 #, python-brace-format
 msgid "{zone} {star}{sevenStar}{animal} {luck}"
 msgstr "{zone}方{star}{sevenStar}{animal}-{luck}"
 
 #. Translators: Huangli deity direction item. Cai Shen, Xi Shen, and Fu Shen are deity names.
-#: addon\globalPlugins\leanCalendar\data.py:314
+#: addon\globalPlugins\leanCalendar\data.py:418
 #, python-brace-format
 msgid "Cai Shen {caiShen}, Xi Shen {xiShen}, Fu Shen {fuShen}"
 msgstr "财神 {caiShen}，喜神 {xiShen}，福神 {fuShen}"
 
 #. Translators: Huangdao/Heidao TwelveStar item, matching tyme4py's TwelveStar type.
-#: addon\globalPlugins\leanCalendar\data.py:325
+#: addon\globalPlugins\leanCalendar\data.py:429
 #, python-brace-format
 msgid "TwelveStar {twelveStar}-{ecliptic}-{luck}"
 msgstr "值神 {twelveStar}-{ecliptic}-{luck}"
 
 #. Translators: Huangli Ji Shen item.
-#: addon\globalPlugins\leanCalendar\data.py:339
+#: addon\globalPlugins\leanCalendar\data.py:443
 #, python-brace-format
 msgid "Ji Shen {gods}"
 msgstr "吉神宜趋 {gods}"
 
 #. Translators: Huangli Xiong Shen item.
-#: addon\globalPlugins\leanCalendar\data.py:341
+#: addon\globalPlugins\leanCalendar\data.py:445
 #, python-brace-format
 msgid "Xiong Shen {gods}"
 msgstr "凶神宜忌 {gods}"
 
 #. Translators: LunarHour luck item, matching tyme4py's LunarHour type.
-#: addon\globalPlugins\leanCalendar\data.py:350
+#: addon\globalPlugins\leanCalendar\data.py:454
 #, python-brace-format
 msgid "LunarHour luck {items}"
 msgstr "时辰吉凶 {items}"
 
 #. Translators: Report item for the Chinese zodiac. {zodiac} is a zodiac animal name.
-#: addon\globalPlugins\leanCalendar\data.py:389
+#: addon\globalPlugins\leanCalendar\data.py:494
 #: addon\globalPlugins\leanCalendar\messages.py:75
 #, python-brace-format
 msgid "Chinese zodiac {zodiac}"
 msgstr "生肖 {zodiac}"
 
 #. Translators: Report item for time remaining until the next solar term.
-#: addon\globalPlugins\leanCalendar\data.py:412
-#: addon\globalPlugins\leanCalendar\formats.py:187
+#: addon\globalPlugins\leanCalendar\data.py:529
+#: addon\globalPlugins\leanCalendar\formats.py:196
 #: addon\globalPlugins\leanCalendar\messages.py:70
 #, python-brace-format
 msgid "until {term} {remaining}"
 msgstr "距{term}{remaining}"
 
 #. Translators: Jianchu duty item, matching tyme4py's Duty type.
-#: addon\globalPlugins\leanCalendar\data.py:433
+#: addon\globalPlugins\leanCalendar\data.py:551
 #: addon\globalPlugins\leanCalendar\messages.py:80
 #, python-brace-format
 msgid "Jianchu duty {duty}"
 msgstr "日十二建 {duty}"
 
 #. Translators: TwentyEightStar item, matching tyme4py's TwentyEightStar type.
-#: addon\globalPlugins\leanCalendar\data.py:440
+#: addon\globalPlugins\leanCalendar\data.py:558
 #, python-brace-format
 msgid "TwentyEightStar {twentyEightStar}"
 msgstr "星宿 {twentyEightStar}"
 
 #. Translators: NineStar item, matching tyme4py's NineStar type.
-#: addon\globalPlugins\leanCalendar\data.py:446
+#: addon\globalPlugins\leanCalendar\data.py:564
 #, python-brace-format
 msgid "NineStar {star}"
 msgstr "九星 {star}"
 
 #. Translators: Report item for Xiao Liu Ren.
-#: addon\globalPlugins\leanCalendar\data.py:448
+#: addon\globalPlugins\leanCalendar\data.py:566
 #, python-brace-format
 msgid "Xiao Liu Ren {minorRen}"
 msgstr "小六壬 {minorRen}"
 
 #. Translators: FetusDay item, matching tyme4py's FetusDay type.
-#: addon\globalPlugins\leanCalendar\data.py:452
+#: addon\globalPlugins\leanCalendar\data.py:570
 #, python-brace-format
 msgid "FetusDay {fetusDay}"
 msgstr "胎神方位 {fetusDay}"
 
 #. Translators: PengZu Baiji item, matching tyme4py's PengZu type.
-#: addon\globalPlugins\leanCalendar\data.py:456
+#: addon\globalPlugins\leanCalendar\data.py:574
 #, python-brace-format
 msgid "PengZu Baiji {pengZu}"
 msgstr "彭祖百忌 {pengZu}"
 
 #. Translators: Section title in the leanCalendar dialog result.
-#: addon\globalPlugins\leanCalendar\data.py:491
+#: addon\globalPlugins\leanCalendar\data.py:617
 msgid "Gregorian"
 msgstr "公历"
 
 #. Translators: Section title in the leanCalendar dialog result.
-#: addon\globalPlugins\leanCalendar\data.py:493
+#: addon\globalPlugins\leanCalendar\data.py:619
 msgid "Lunar"
 msgstr "农历"
 
 #. Translators: Section title in the leanCalendar dialog result.
-#: addon\globalPlugins\leanCalendar\data.py:495
+#: addon\globalPlugins\leanCalendar\data.py:621
 msgid "Solar Terms and Phenology"
 msgstr "节气物候"
 
 #. Translators: Section title in the leanCalendar dialog result.
-#: addon\globalPlugins\leanCalendar\data.py:497
+#: addon\globalPlugins\leanCalendar\data.py:623
 msgid "Almanac"
 msgstr "黄历"
 
@@ -292,113 +374,119 @@ msgstr "{year}年{month}月{day}日"
 #: addon\globalPlugins\leanCalendar\formats.py:72
 #, python-brace-format
 msgid "{year}-{month}-{day} {hour}:00"
-msgstr "{year}年 {month}月 {day}日 {hour}时"
+msgstr "{year}年{month}月{day}日 {hour}时"
+
+#. Translators: Gregorian month, day, and time. {time} is HH:MM:SS.
+#: addon\globalPlugins\leanCalendar\formats.py:86
+#, python-brace-format
+msgid "{month}-{day} {time}"
+msgstr "{month}月{day}日 {time}"
 
 #. Translators: Gregorian month day count. {month} and {days} are numbers.
-#: addon\globalPlugins\leanCalendar\formats.py:91
+#: addon\globalPlugins\leanCalendar\formats.py:100
 #, python-brace-format
 msgid "{month} has {days} days"
 msgstr "{month}月{days}天"
 
 #. Translators: Gregorian weekday report. {weekday} is a weekday name or number.
-#: addon\globalPlugins\leanCalendar\formats.py:99
+#: addon\globalPlugins\leanCalendar\formats.py:108
 #, python-brace-format
 msgid "weekday {weekday}"
 msgstr "星期{weekday}"
 
 #. Translators: Gregorian day-of-year report. {dayNumber} is a number.
-#: addon\globalPlugins\leanCalendar\formats.py:104
+#: addon\globalPlugins\leanCalendar\formats.py:113
 #, python-brace-format
 msgid "year day {dayNumber}"
 msgstr "今年第{dayNumber}天"
 
 #. Translators: Gregorian week-of-year report. {weekNumber} is a number.
-#: addon\globalPlugins\leanCalendar\formats.py:110
+#: addon\globalPlugins\leanCalendar\formats.py:119
 #, python-brace-format
 msgid "week {weekNumber}"
 msgstr "第{weekNumber}周"
 
 #. Translators: Gregorian quarter report. {quarter} is a number from 1 to 4.
-#: addon\globalPlugins\leanCalendar\formats.py:116
+#: addon\globalPlugins\leanCalendar\formats.py:125
 #, python-brace-format
 msgid "quarter {quarter}"
 msgstr "第{quarter}季度"
 
 #. Translators: Western zodiac sign report. {sign} is a Western zodiac sign name.
-#: addon\globalPlugins\leanCalendar\formats.py:121
+#: addon\globalPlugins\leanCalendar\formats.py:130
 #, python-brace-format
 msgid "Western zodiac sign {sign}"
 msgstr "{sign}座"
 
 #. Translators: Remaining time when the target time has already arrived.
-#: addon\globalPlugins\leanCalendar\formats.py:127
+#: addon\globalPlugins\leanCalendar\formats.py:136
 msgid "now"
 msgstr "现在"
 
 #. Translators: Remaining time until the next solar term. {days} and {hours} are numbers.
-#: addon\globalPlugins\leanCalendar\formats.py:136
+#: addon\globalPlugins\leanCalendar\formats.py:145
 #, python-brace-format
 msgid "{days} days {hours} hours"
 msgstr "{days}天{hours}小时"
 
 #. Translators: Remaining time until the next solar term. {hours} and {minutes} are numbers.
-#: addon\globalPlugins\leanCalendar\formats.py:139
+#: addon\globalPlugins\leanCalendar\formats.py:148
 #, python-brace-format
 msgid "{hours} hours {minutes} minutes"
 msgstr "{hours}小时{minutes}分钟"
 
 #. Translators: Remaining time until the next solar term when less than one minute remains.
-#: addon\globalPlugins\leanCalendar\formats.py:142
+#: addon\globalPlugins\leanCalendar\formats.py:151
 msgid "less than 1 minute"
 msgstr "不足1分钟"
 
 #. Translators: Remaining time until the next solar term. {minutes} is a number.
-#: addon\globalPlugins\leanCalendar\formats.py:144
+#: addon\globalPlugins\leanCalendar\formats.py:153
 #, python-brace-format
 msgid "{minutes} minutes"
 msgstr "{minutes}分钟"
 
 #. Translators: Remaining whole days until the next solar term. {days} is a number.
-#: addon\globalPlugins\leanCalendar\formats.py:152
+#: addon\globalPlugins\leanCalendar\formats.py:161
 #, python-brace-format
 msgid "{days} days"
 msgstr "{days}天"
 
 #. Translators: Reports a legal holiday make-up work day. {holiday} is the holiday name.
-#: addon\globalPlugins\leanCalendar\formats.py:168
+#: addon\globalPlugins\leanCalendar\formats.py:177
 #, python-brace-format
 msgid "{holiday} work"
 msgstr "{holiday}班"
 
 #. Translators: Reports a legal holiday day off. {holiday} is the holiday name.
-#: addon\globalPlugins\leanCalendar\formats.py:171
+#: addon\globalPlugins\leanCalendar\formats.py:180
 #, python-brace-format
 msgid "{holiday} off"
 msgstr "{holiday}休"
 
 #. Translators: Report item for the current moon phase day.
-#: addon\globalPlugins\leanCalendar\formats.py:203
+#: addon\globalPlugins\leanCalendar\formats.py:212
 #, python-brace-format
 msgid "moon phase {phaseDay}"
 msgstr "月相 {phaseDay}"
 
 #. Translators: Gregorian day status.
-#: addon\globalPlugins\leanCalendar\formats.py:211
+#: addon\globalPlugins\leanCalendar\formats.py:220
 msgid "weekend"
 msgstr "周末"
 
 #. Translators: Gregorian day status.
-#: addon\globalPlugins\leanCalendar\formats.py:213
+#: addon\globalPlugins\leanCalendar\formats.py:222
 msgid "workday"
 msgstr "工作日"
 
 #. Translators: Separator between calendar report items.
-#: addon\globalPlugins\leanCalendar\formats.py:218
+#: addon\globalPlugins\leanCalendar\formats.py:227
 msgid ", "
 msgstr "，"
 
 #. Translators: Current solar term day report. {term} is a solar term name.
-#: addon\globalPlugins\leanCalendar\formats.py:232
+#: addon\globalPlugins\leanCalendar\formats.py:241
 #, python-brace-format
 msgid "{term} day {dayNumber}"
 msgstr "{term}第{dayNumber}天"
@@ -408,6 +496,12 @@ msgstr "{term}第{dayNumber}天"
 #, python-brace-format
 msgid "{year} year, {month} month, {day} day, {hour} hour"
 msgstr "{year}年，{month}月，{day}日，{hour}时"
+
+#. Translators: Report item for the full moon time. {time} is the time of day.
+#: addon\globalPlugins\leanCalendar\messages.py:77
+#, python-brace-format
+msgid "full moon at {time}"
+msgstr "望 {time}"
 
 #. Translators: Error message shown when the leanCalendar dialog cannot be opened.
 #: addon\globalPlugins\leanCalendar\__init__.py:36
