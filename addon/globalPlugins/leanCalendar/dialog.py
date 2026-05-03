@@ -133,6 +133,7 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 		self.notebook = wx.Notebook(self)
 		self.basicPanel = wx.Panel(self.notebook)
 		self._makeBasicPage(self.basicPanel)
+		self.basicPanel.Bind(wx.EVT_NAVIGATION_KEY, self._onResultNavigation)
 		# Translators: Basic tab in the leanCalendar dialog.
 		self.notebook.AddPage(self.basicPanel, _("Basic"))
 		settingsSizer.Add(self.notebook, flag=wx.EXPAND, proportion=1)
@@ -175,6 +176,7 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 			panel,
 			style=wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH2,
 		)
+		self.resultCtrl.Bind(wx.EVT_NAVIGATION_KEY, self._onResultNavigation)
 		self.resultCtrl.SetMinSize(self.scaleSize((720, 220)))
 		sizer.Add(guiHelper.associateElements(resultLabel, self.resultCtrl), flag=wx.EXPAND, proportion=1)
 
@@ -579,6 +581,15 @@ class LeanCalendarDialog(nvdaControls.DPIScaledDialog):
 
 	def _onToday(self, evt: wx.CommandEvent) -> None:
 		self._setQuery(CalendarQuery.fromDatetime(datetime.now()))
+		evt.Skip()
+
+	def _onResultNavigation(self, evt: wx.NavigationKeyEvent) -> None:
+		currentFocus: wx.Window | None = evt.GetCurrentFocus()
+		if currentFocus is None:
+			currentFocus = wx.Window.FindFocus()
+		if currentFocus == self.resultCtrl and evt.IsFromTab() and evt.GetDirection():
+			self.notebook.SetFocus()
+			return
 		evt.Skip()
 
 	def _setQuery(self, query: CalendarQuery) -> None:
