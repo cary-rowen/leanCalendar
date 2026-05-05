@@ -1,5 +1,9 @@
 # leanCalendar Changelog
 
+## 0.2.1
+
+* Use the generic zh locale so Chinese localization can apply across Chinese regional variants.
+
 ## 0.2.0
 
 * Richer calendar query results.
