@@ -36,7 +36,6 @@ def getBriefLeanCalendarMessage(now: datetime | None = None) -> str:
 	parts: list[str] = [
 		formats.formatLunarDate(lunarDay),
 		formats.formatLunarMonthSize(lunarMonth),
-		lunarHour.get_name(),
 		sixtyCycleText,
 		formats.formatSolarTermDay(solarDay),
 		f"{threePhenology} {phenologyDay}",
