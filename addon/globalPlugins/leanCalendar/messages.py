@@ -59,17 +59,17 @@ def getDetailedLeanCalendarMessage(now: datetime | None = None) -> str:
 	lunarMonth = lunarDay.get_lunar_month()
 	currentTerm = solarTime.get_term()
 	previousJie = currentTerm if currentTerm.is_jie() else currentTerm.next(-1)
-	nextJie = previousJie.next(2)
-	nextJieTime = nextJie.get_julian_day().get_solar_time()
+	nextTerm = currentTerm.next(1)
+	nextTermTime = nextTerm.get_julian_day().get_solar_time()
 	fullMoon = createPhase(lunarMonth.get_year(), lunarMonth.get_month_with_leap(), 4)
 	zodiacText: str = str(lunarMonth.get_lunar_year().get_sixty_cycle().get_earth_branch().get_zodiac())
 	parts: list[str] = [
 		formats.formatSolarTermCompact(previousJie),
-		formats.formatSolarTermCompact(nextJie),
+		formats.formatSolarTermCompact(nextTerm),
 		# Translators: Report item for time remaining until the next solar term.
 		_("until {term} {remaining}").format(
-			term=nextJie.get_name(),
-			remaining=formats.formatSecondsUntil(nextJieTime.subtract(solarTime)),
+			term=nextTerm.get_name(),
+			remaining=formats.formatSecondsUntil(nextTermTime.subtract(solarTime)),
 		),
 		# Translators: Report item for the Chinese zodiac. {zodiac} is a zodiac animal name.
 		_("Chinese zodiac {zodiac}").format(zodiac=zodiacText),
