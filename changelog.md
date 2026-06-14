@@ -1,5 +1,10 @@
 # leanCalendar Changelog
 
+## 0.2.2
+
+* Fixed next solar term countdowns in the detailed lunar report and query results so intermediate solar terms are no longer skipped.
+* Streamlined the brief lunar report by removing repeated lunar hour wording when the four pillars already include the hour pillar.
+
 ## 0.2.1
 
 * Use the generic zh locale so Chinese localization can apply across Chinese regional variants.

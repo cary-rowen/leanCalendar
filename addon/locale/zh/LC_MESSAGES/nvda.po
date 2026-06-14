@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: leanCalendar 0.1.0\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2026-05-06 02:01+0800\n"
+"POT-Creation-Date: 2026-06-14 08:13+0800\n"
 "PO-Revision-Date: 2026-05-06 02:01+0800\n"
 "Last-Translator: Cary-rowen <manchen_0528@outlook.com>\n"
 "Language-Team: Chinese\n"
@@ -190,7 +190,7 @@ msgstr "时辰吉凶 {items}"
 
 #. Translators: Report item for the Chinese zodiac. {zodiac} is a zodiac animal name.
 #: addon\globalPlugins\leanCalendar\data.py:494
-#: addon\globalPlugins\leanCalendar\messages.py:75
+#: addon\globalPlugins\leanCalendar\messages.py:74
 #, python-brace-format
 msgid "Chinese zodiac {zodiac}"
 msgstr "生肖 {zodiac}"
@@ -198,14 +198,14 @@ msgstr "生肖 {zodiac}"
 #. Translators: Report item for time remaining until the next solar term.
 #: addon\globalPlugins\leanCalendar\data.py:529
 #: addon\globalPlugins\leanCalendar\formats.py:196
-#: addon\globalPlugins\leanCalendar\messages.py:70
+#: addon\globalPlugins\leanCalendar\messages.py:69
 #, python-brace-format
 msgid "until {term} {remaining}"
 msgstr "距{term}{remaining}"
 
 #. Translators: Jianchu duty item, matching tyme4py's Duty type.
 #: addon\globalPlugins\leanCalendar\data.py:551
-#: addon\globalPlugins\leanCalendar\messages.py:80
+#: addon\globalPlugins\leanCalendar\messages.py:79
 #, python-brace-format
 msgid "Jianchu duty {duty}"
 msgstr "日十二建 {duty}"
@@ -498,7 +498,7 @@ msgid "{year} year, {month} month, {day} day, {hour} hour"
 msgstr "{year}年，{month}月，{day}日，{hour}时"
 
 #. Translators: Report item for the full moon time. {time} is the time of day.
-#: addon\globalPlugins\leanCalendar\messages.py:77
+#: addon\globalPlugins\leanCalendar\messages.py:76
 #, python-brace-format
 msgid "full moon at {time}"
 msgstr "望 {time}"
@@ -547,14 +547,27 @@ msgstr ""
 
 #: buildVars.py:37
 msgid ""
-"### 0.2.1\n"
+"### 0.2.2\n"
 "\n"
-"* Use the generic zh locale so Chinese localization can apply across Chinese "
-"regional variants."
+"* Fixed next solar term countdowns in the detailed lunar report and query "
+"results so intermediate solar terms are no longer skipped.\n"
+"* Streamlined the brief lunar report by removing repeated lunar hour wording "
+"when the four pillars already include the hour pillar."
 msgstr ""
-"### 0.2.1\n"
+"### 0.2.2\n"
 "\n"
-"* 使用通用 zh 区域设置，使中文本地化可应用于不同中文区域变体。"
+"* 修复详细农历播报和查询结果中的下个节气倒计时，避免跳过中间节气。\n"
+"* 简化简要农历播报；当四柱已包含时柱时，不再重复播报时辰。"
+
+#~ msgid ""
+#~ "### 0.2.1\n"
+#~ "\n"
+#~ "* Use the generic zh locale so Chinese localization can apply across "
+#~ "Chinese regional variants."
+#~ msgstr ""
+#~ "### 0.2.1\n"
+#~ "\n"
+#~ "* 使用通用 zh 区域设置，使中文本地化可应用于不同中文区域变体。"
 
 #~ msgid ""
 #~ "### 0.2.0\n"
