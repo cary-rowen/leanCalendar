@@ -509,8 +509,8 @@ def _buildSolarTermLines(solarTime: SolarTime) -> list[str]:
 	solarDay: SolarDay = solarTime.get_solar_day()
 	currentTerm = solarTime.get_term()
 	previousJie = currentTerm if currentTerm.is_jie() else currentTerm.next(-1)
-	nextJie = previousJie.next(2)
-	nextJieTime: SolarTime = nextJie.get_julian_day().get_solar_time()
+	nextTerm = currentTerm.next(1)
+	nextTermTime: SolarTime = nextTerm.get_julian_day().get_solar_time()
 	phenologyDay = solarDay.get_phenology_day()
 	threePhenology = phenologyDay.get_phenology().get_three_phenology()
 	termParts: list[str] = [
@@ -519,16 +519,16 @@ def _buildSolarTermLines(solarTime: SolarTime) -> list[str]:
 			previousJie.get_julian_day().get_solar_time(),
 		),
 	]
-	if not _isSameSolarTerm(previousJie, currentTerm) and not _isSameSolarTerm(nextJie, currentTerm):
+	if not _isSameSolarTerm(previousJie, currentTerm) and not _isSameSolarTerm(nextTerm, currentTerm):
 		termParts.append(
 			_formatNameWithTime(currentTerm.get_name(), currentTerm.get_julian_day().get_solar_time()),
 		)
-	termParts.append(_formatNameWithTime(formats.formatSolarTermCompact(nextJie), nextJieTime))
+	termParts.append(_formatNameWithTime(formats.formatSolarTermCompact(nextTerm), nextTermTime))
 	termParts.append(
 		# Translators: Report item for time remaining until the next solar term.
 		_("until {term} {remaining}").format(
-			term=nextJie.get_name(),
-			remaining=formats.formatSecondsUntil(nextJieTime.subtract(solarTime)),
+			term=nextTerm.get_name(),
+			remaining=formats.formatSecondsUntil(nextTermTime.subtract(solarTime)),
 		),
 	)
 	phenologyParts: list[str] = [

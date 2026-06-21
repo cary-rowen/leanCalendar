@@ -661,6 +661,37 @@ class MessagesAndDisplayContractTest(ContractTestCase):
 			with self.subTest(fragment=fragment):
 				self.assertIn(fragment, detailedLeanCalendar)
 
+	def test_detailed_lunar_message_uses_immediate_next_solar_term(self) -> None:
+		now = datetime(2026, 6, 14, 0, 0, 0)
+		solarTime = tymeAccess.createSolarTime(now.year, now.month, now.day, now.hour, now.minute, now.second)
+		currentTerm = solarTime.get_term()
+		nextTerm = currentTerm.next(1)
+		nextJie = currentTerm.next(2)
+
+		detailedLeanCalendar = messages.getDetailedLeanCalendarMessage(now)
+
+		self.assertTrue(currentTerm.is_jie())
+		self.assertIn(formats.formatSolarTermCompact(nextTerm), detailedLeanCalendar)
+		self.assertIn(f"until {nextTerm.get_name()} ", detailedLeanCalendar)
+		self.assertNotIn(f"until {nextJie.get_name()} ", detailedLeanCalendar)
+
+	def test_basic_display_uses_immediate_next_solar_term(self) -> None:
+		query = data.CalendarQuery.fromSolarValues(2026, 6, 14, 0, 0, 0)
+		currentTerm = query.solarTime.get_term()
+		nextTerm = currentTerm.next(1)
+		nextJie = currentTerm.next(2)
+
+		sections = data.buildBasicSections(query)
+		solarTermSection = next(
+			section for section in sections if section.label == "Solar Terms and Phenology"
+		)
+		countdownLine = solarTermSection.lines[1]
+
+		self.assertTrue(currentTerm.is_jie())
+		self.assertIn(formats.formatSolarTermCompact(nextTerm), countdownLine)
+		self.assertIn(f"until {nextTerm.get_name()} ", countdownLine)
+		self.assertNotIn(f"until {nextJie.get_name()} ", countdownLine)
+
 	def test_basic_display_sections_cover_all_result_groups(self) -> None:
 		query = data.CalendarQuery.fromSolarValues(2026, 5, 3, 20, 15, 30)
 		sections = data.buildBasicSections(query)

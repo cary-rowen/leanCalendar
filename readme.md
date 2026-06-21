@@ -19,7 +19,6 @@ Press once to report:
 
 * Chinese lunar date.
 * Lunar month size.
-* Current shichen, the traditional two-hour period.
 * Sexagenary cycle year, month, day, and hour.
 * Current solar term day.
 * Current hou period.

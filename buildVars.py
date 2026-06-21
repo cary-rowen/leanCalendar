@@ -30,13 +30,13 @@ addon_info = AddonInfo(
 		"""Reports Chinese lunar date, solar terms, Gregorian date and time details, and an interactive calendar query dialog.""",
 	),
 	# version
-	addon_version="0.2.1",
+	addon_version="0.2.3",
 	# Brief changelog for this version
 	# Translators: what's new content for the add-on version to be shown in the add-on store
 	addon_changelog=_(
-		"""### 0.2.1
+		"""### 0.2.3
 
-* Use the generic zh locale so Chinese localization can apply across Chinese regional variants.""",
+* Dependent Updates.""",
 	),
 	# Author(s)
 	addon_author="Cary-rowen <manchen_0528@outlook.com>",
