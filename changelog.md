@@ -1,5 +1,9 @@
 # leanCalendar Changelog
 
+## 0.2.3
+
+* Dependent Updates.
+
 ## 0.2.2
 
 * Fixed next solar term countdowns in the detailed lunar report and query results so intermediate solar terms are no longer skipped.

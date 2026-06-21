@@ -34,10 +34,9 @@ addon_info = AddonInfo(
 	# Brief changelog for this version
 	# Translators: what's new content for the add-on version to be shown in the add-on store
 	addon_changelog=_(
-		"""### 0.2.2
+		"""### 0.2.3
 
-* Fixed next solar term countdowns in the detailed lunar report and query results so intermediate solar terms are no longer skipped.
-* Streamlined the brief lunar report by removing repeated lunar hour wording when the four pillars already include the hour pillar.""",
+* Dependent Updates.""",
 	),
 	# Author(s)
 	addon_author="Cary-rowen <manchen_0528@outlook.com>",
