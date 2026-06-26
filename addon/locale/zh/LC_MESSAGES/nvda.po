@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: leanCalendar 0.1.0\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2026-06-14 08:13+0800\n"
+"POT-Creation-Date: 2026-06-27 05:46+0800\n"
 "PO-Revision-Date: 2026-05-06 02:01+0800\n"
 "Last-Translator: Cary-rowen <manchen_0528@outlook.com>\n"
 "Language-Team: Chinese\n"
@@ -423,11 +423,11 @@ msgstr "{sign}座"
 msgid "now"
 msgstr "现在"
 
-#. Translators: Remaining time until the next solar term. {days} and {hours} are numbers.
+#. Translators: Remaining time until the next solar term. {days}, {hours}, and {minutes} are numbers.
 #: addon\globalPlugins\leanCalendar\formats.py:145
 #, python-brace-format
-msgid "{days} days {hours} hours"
-msgstr "{days}天{hours}小时"
+msgid "{days} days {hours} hours {minutes} minutes"
+msgstr "{days}天{hours}小时{minutes}分钟"
 
 #. Translators: Remaining time until the next solar term. {hours} and {minutes} are numbers.
 #: addon\globalPlugins\leanCalendar\formats.py:148
@@ -547,17 +547,13 @@ msgstr ""
 
 #: buildVars.py:37
 msgid ""
-"### 0.2.2\n"
+"### 0.2.3\n"
 "\n"
-"* Fixed next solar term countdowns in the detailed lunar report and query "
-"results so intermediate solar terms are no longer skipped.\n"
-"* Streamlined the brief lunar report by removing repeated lunar hour wording "
-"when the four pillars already include the hour pillar."
+"* Dependent Updates."
 msgstr ""
-"### 0.2.2\n"
+"### 0.2.3\n"
 "\n"
-"* 修复详细农历播报和查询结果中的下个节气倒计时，避免跳过中间节气。\n"
-"* 简化简要农历播报；当四柱已包含时柱时，不再重复播报时辰。"
+"* 依赖更新。"
 
 #~ msgid ""
 #~ "### 0.2.1\n"

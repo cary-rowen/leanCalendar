@@ -584,7 +584,7 @@ class FormatContractTest(ContractTestCase):
 		self.assertEqual(formats.formatSecondsUntil(60), "1 minutes")
 		self.assertEqual(formats.formatSecondsUntil(3599), "59 minutes")
 		self.assertEqual(formats.formatSecondsUntil(3600), "1 hours 0 minutes")
-		self.assertEqual(formats.formatSecondsUntil(90061), "1 days 1 hours")
+		self.assertEqual(formats.formatSecondsUntil(90061), "1 days 1 hours 1 minutes")
 		self.assertEqual(formats.formatBriefSecondsUntil(86399), "23 hours 59 minutes")
 		self.assertEqual(formats.formatBriefSecondsUntil(86400), "1 days")
 		self.assertEqual(formats.formatBriefSecondsUntil(172799), "1 days")
