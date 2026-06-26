@@ -30,13 +30,15 @@ addon_info = AddonInfo(
 		"""Reports Chinese lunar date, solar terms, Gregorian date and time details, and an interactive calendar query dialog.""",
 	),
 	# version
-	addon_version="0.2.3",
+	addon_version="0.2.6",
 	# Brief changelog for this version
 	# Translators: what's new content for the add-on version to be shown in the add-on store
 	addon_changelog=_(
-		"""### 0.2.3
+		"""### 0.2.6
 
-* Dependent Updates.""",
+* Fixed detailed lunar reports so the current solar term is included when it is a qi term, preventing nearby solar terms from being skipped.
+* Show minutes in multi-day solar term countdowns for more precise remaining time.
+* Improved report readability by grouping F11 and detailed F12 output across semantic lines while preserving punctuation before line breaks.""",
 	),
 	# Author(s)
 	addon_author="Cary-rowen <manchen_0528@outlook.com>",
