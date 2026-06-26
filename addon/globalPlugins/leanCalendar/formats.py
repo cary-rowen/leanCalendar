@@ -229,6 +229,12 @@ def joinParts(parts: list[str]) -> str:
 	return _(", ").join(parts)
 
 
+def joinPartLines(lines: list[list[str]]) -> str:
+	lineTexts: list[str] = [joinParts(parts) for parts in lines if parts]
+	# Translators: Separator between calendar report items.
+	return f"{_(', ')}\n".join(lineTexts)
+
+
 def joinLimitedParts(parts: list[str], limit: int = 5) -> str:
 	visibleParts: list[str] = parts[:limit]
 	text: str = joinParts(visibleParts)
