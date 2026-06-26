@@ -675,6 +675,26 @@ class MessagesAndDisplayContractTest(ContractTestCase):
 		self.assertIn(f"until {nextTerm.get_name()} ", detailedLeanCalendar)
 		self.assertNotIn(f"until {nextJie.get_name()} ", detailedLeanCalendar)
 
+	def test_detailed_lunar_message_does_not_skip_current_qi_term(self) -> None:
+		now = datetime(2026, 6, 27, 0, 0, 0)
+		solarTime = tymeAccess.createSolarTime(now.year, now.month, now.day, now.hour, now.minute, now.second)
+		currentTerm = solarTime.get_term()
+		previousJie = currentTerm.next(-1)
+		nextTerm = currentTerm.next(1)
+
+		detailedLeanCalendar = messages.getDetailedLeanCalendarMessage(now)
+
+		self.assertFalse(currentTerm.is_jie())
+		self.assertLess(
+			detailedLeanCalendar.index(formats.formatSolarTermCompact(previousJie)),
+			detailedLeanCalendar.index(formats.formatSolarTermCompact(currentTerm)),
+		)
+		self.assertLess(
+			detailedLeanCalendar.index(formats.formatSolarTermCompact(currentTerm)),
+			detailedLeanCalendar.index(formats.formatSolarTermCompact(nextTerm)),
+		)
+		self.assertIn(f"until {nextTerm.get_name()} ", detailedLeanCalendar)
+
 	def test_basic_display_uses_immediate_next_solar_term(self) -> None:
 		query = data.CalendarQuery.fromSolarValues(2026, 6, 14, 0, 0, 0)
 		currentTerm = query.solarTime.get_term()

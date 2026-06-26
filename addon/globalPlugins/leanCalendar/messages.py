@@ -78,6 +78,8 @@ def getDetailedLeanCalendarMessage(now: datetime | None = None) -> str:
 		# Translators: Jianchu duty item, matching tyme4py's Duty type.
 		_("Jianchu duty {duty}").format(duty=lunarDay.get_duty()),
 	]
+	if not currentTerm.is_jie():
+		parts.insert(1, formats.formatSolarTermCompact(currentTerm))
 	parts.extend(formats.getTraditionalPeriodSummaries(solarDay))
 	return formats.joinParts(parts)
 
