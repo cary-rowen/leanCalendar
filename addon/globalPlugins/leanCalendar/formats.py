@@ -143,7 +143,9 @@ def formatSecondsUntil(seconds: int) -> str:
 	if days:
 		# Translators: Remaining time until the next solar term. {days}, {hours}, and {minutes} are numbers.
 		return _("{days} days {hours} hours {minutes} minutes").format(
-			days=days, hours=hours, minutes=minutes
+			days=days,
+			hours=hours,
+			minutes=minutes,
 		)
 	if hours:
 		# Translators: Remaining time until the next solar term. {hours} and {minutes} are numbers.
