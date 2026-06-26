@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: leanCalendar 0.1.0\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2026-06-14 08:13+0800\n"
+"POT-Creation-Date: 2026-06-27 06:16+0800\n"
 "PO-Revision-Date: 2026-05-06 02:01+0800\n"
 "Last-Translator: Cary-rowen <manchen_0528@outlook.com>\n"
 "Language-Team: Chinese\n"
@@ -190,22 +190,22 @@ msgstr "时辰吉凶 {items}"
 
 #. Translators: Report item for the Chinese zodiac. {zodiac} is a zodiac animal name.
 #: addon\globalPlugins\leanCalendar\data.py:494
-#: addon\globalPlugins\leanCalendar\messages.py:74
+#: addon\globalPlugins\leanCalendar\messages.py:87
 #, python-brace-format
 msgid "Chinese zodiac {zodiac}"
 msgstr "生肖 {zodiac}"
 
 #. Translators: Report item for time remaining until the next solar term.
 #: addon\globalPlugins\leanCalendar\data.py:529
-#: addon\globalPlugins\leanCalendar\formats.py:196
-#: addon\globalPlugins\leanCalendar\messages.py:69
+#: addon\globalPlugins\leanCalendar\formats.py:198
+#: addon\globalPlugins\leanCalendar\messages.py:80
 #, python-brace-format
 msgid "until {term} {remaining}"
 msgstr "距{term}{remaining}"
 
 #. Translators: Jianchu duty item, matching tyme4py's Duty type.
 #: addon\globalPlugins\leanCalendar\data.py:551
-#: addon\globalPlugins\leanCalendar\messages.py:79
+#: addon\globalPlugins\leanCalendar\messages.py:72
 #, python-brace-format
 msgid "Jianchu duty {duty}"
 msgstr "日十二建 {duty}"
@@ -423,70 +423,71 @@ msgstr "{sign}座"
 msgid "now"
 msgstr "现在"
 
-#. Translators: Remaining time until the next solar term. {days} and {hours} are numbers.
+#. Translators: Remaining time until the next solar term. {days}, {hours}, and {minutes} are numbers.
 #: addon\globalPlugins\leanCalendar\formats.py:145
 #, python-brace-format
-msgid "{days} days {hours} hours"
-msgstr "{days}天{hours}小时"
+msgid "{days} days {hours} hours {minutes} minutes"
+msgstr "{days}天{hours}小时{minutes}分钟"
 
 #. Translators: Remaining time until the next solar term. {hours} and {minutes} are numbers.
-#: addon\globalPlugins\leanCalendar\formats.py:148
+#: addon\globalPlugins\leanCalendar\formats.py:150
 #, python-brace-format
 msgid "{hours} hours {minutes} minutes"
 msgstr "{hours}小时{minutes}分钟"
 
 #. Translators: Remaining time until the next solar term when less than one minute remains.
-#: addon\globalPlugins\leanCalendar\formats.py:151
+#: addon\globalPlugins\leanCalendar\formats.py:153
 msgid "less than 1 minute"
 msgstr "不足1分钟"
 
 #. Translators: Remaining time until the next solar term. {minutes} is a number.
-#: addon\globalPlugins\leanCalendar\formats.py:153
+#: addon\globalPlugins\leanCalendar\formats.py:155
 #, python-brace-format
 msgid "{minutes} minutes"
 msgstr "{minutes}分钟"
 
 #. Translators: Remaining whole days until the next solar term. {days} is a number.
-#: addon\globalPlugins\leanCalendar\formats.py:161
+#: addon\globalPlugins\leanCalendar\formats.py:163
 #, python-brace-format
 msgid "{days} days"
 msgstr "{days}天"
 
 #. Translators: Reports a legal holiday make-up work day. {holiday} is the holiday name.
-#: addon\globalPlugins\leanCalendar\formats.py:177
+#: addon\globalPlugins\leanCalendar\formats.py:179
 #, python-brace-format
 msgid "{holiday} work"
 msgstr "{holiday}班"
 
 #. Translators: Reports a legal holiday day off. {holiday} is the holiday name.
-#: addon\globalPlugins\leanCalendar\formats.py:180
+#: addon\globalPlugins\leanCalendar\formats.py:182
 #, python-brace-format
 msgid "{holiday} off"
 msgstr "{holiday}休"
 
 #. Translators: Report item for the current moon phase day.
-#: addon\globalPlugins\leanCalendar\formats.py:212
+#: addon\globalPlugins\leanCalendar\formats.py:214
 #, python-brace-format
 msgid "moon phase {phaseDay}"
 msgstr "月相 {phaseDay}"
 
 #. Translators: Gregorian day status.
-#: addon\globalPlugins\leanCalendar\formats.py:220
+#: addon\globalPlugins\leanCalendar\formats.py:222
 msgid "weekend"
 msgstr "周末"
 
 #. Translators: Gregorian day status.
-#: addon\globalPlugins\leanCalendar\formats.py:222
+#: addon\globalPlugins\leanCalendar\formats.py:224
 msgid "workday"
 msgstr "工作日"
 
 #. Translators: Separator between calendar report items.
-#: addon\globalPlugins\leanCalendar\formats.py:227
+#: addon\globalPlugins\leanCalendar\formats.py:229
+#: addon\globalPlugins\leanCalendar\formats.py:235
 msgid ", "
 msgstr "，"
 
 #. Translators: Current solar term day report. {term} is a solar term name.
-#: addon\globalPlugins\leanCalendar\formats.py:241
+#: addon\globalPlugins\leanCalendar\formats.py:249
 #, python-brace-format
 msgid "{term} day {dayNumber}"
 msgstr "{term}第{dayNumber}天"
@@ -498,7 +499,7 @@ msgid "{year} year, {month} month, {day} day, {hour} hour"
 msgstr "{year}年，{month}月，{day}日，{hour}时"
 
 #. Translators: Report item for the full moon time. {time} is the time of day.
-#: addon\globalPlugins\leanCalendar\messages.py:76
+#: addon\globalPlugins\leanCalendar\messages.py:89
 #, python-brace-format
 msgid "full moon at {time}"
 msgstr "望 {time}"
@@ -547,17 +548,20 @@ msgstr ""
 
 #: buildVars.py:37
 msgid ""
-"### 0.2.2\n"
+"### 0.2.6\n"
 "\n"
-"* Fixed next solar term countdowns in the detailed lunar report and query "
-"results so intermediate solar terms are no longer skipped.\n"
-"* Streamlined the brief lunar report by removing repeated lunar hour wording "
-"when the four pillars already include the hour pillar."
+"* Fixed detailed lunar reports so the current solar term is included when it "
+"is a qi term, preventing nearby solar terms from being skipped.\n"
+"* Show minutes in multi-day solar term countdowns for more precise remaining "
+"time.\n"
+"* Improved report readability by grouping F11 and detailed F12 output across "
+"semantic lines while preserving punctuation before line breaks."
 msgstr ""
-"### 0.2.2\n"
+"### 0.2.6\n"
 "\n"
-"* 修复详细农历播报和查询结果中的下个节气倒计时，避免跳过中间节气。\n"
-"* 简化简要农历播报；当四柱已包含时柱时，不再重复播报时辰。"
+"* 修复详细农历播报，在当前节气为气时也会读出当前节气，避免跳过附近节气。\n"
+"* 多日节气倒计时增加分钟显示，剩余时间更精确。\n"
+"* 改进播报可读性，按语义行组织 F11 和详细 F12 输出，并保留换行前的标点。"
 
 #~ msgid ""
 #~ "### 0.2.1\n"

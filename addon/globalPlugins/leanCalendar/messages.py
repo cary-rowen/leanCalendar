@@ -33,20 +33,21 @@ def getBriefLeanCalendarMessage(now: datetime | None = None) -> str:
 		day=sixtyCycleDay.get_sixty_cycle(),
 		hour=lunarHour.get_sixty_cycle(),
 	)
-	parts: list[str] = [
-		formats.formatLunarDate(lunarDay),
-		formats.formatLunarMonthSize(lunarMonth),
-		sixtyCycleText,
-		formats.formatSolarTermDay(solarDay),
-		f"{threePhenology} {phenologyDay}",
-	]
+	extraParts: list[str] = []
 	lunarFestivalSummary: str | None = formats.getLunarFestivalSummary(solarTime)
 	if lunarFestivalSummary:
-		parts.append(lunarFestivalSummary)
+		extraParts.append(lunarFestivalSummary)
 	nextSolarTermSummary: str | None = formats.getBriefNextSolarTermSummary(solarTime)
 	if nextSolarTermSummary:
-		parts.append(nextSolarTermSummary)
-	return formats.joinParts(parts)
+		extraParts.append(nextSolarTermSummary)
+	return formats.joinPartLines(
+		[
+			[formats.formatLunarDate(lunarDay), formats.formatLunarMonthSize(lunarMonth)],
+			[sixtyCycleText],
+			[formats.formatSolarTermDay(solarDay), f"{threePhenology} {phenologyDay}"],
+			extraParts,
+		],
+	)
 
 
 def getDetailedLeanCalendarMessage(now: datetime | None = None) -> str:
@@ -62,24 +63,35 @@ def getDetailedLeanCalendarMessage(now: datetime | None = None) -> str:
 	nextTermTime = nextTerm.get_julian_day().get_solar_time()
 	fullMoon = createPhase(lunarMonth.get_year(), lunarMonth.get_month_with_leap(), 4)
 	zodiacText: str = str(lunarMonth.get_lunar_year().get_sixty_cycle().get_earth_branch().get_zodiac())
-	parts: list[str] = [
-		formats.formatSolarTermCompact(previousJie),
-		formats.formatSolarTermCompact(nextTerm),
-		# Translators: Report item for time remaining until the next solar term.
-		_("until {term} {remaining}").format(
-			term=nextTerm.get_name(),
-			remaining=formats.formatSecondsUntil(nextTermTime.subtract(solarTime)),
-		),
-		# Translators: Report item for the Chinese zodiac. {zodiac} is a zodiac animal name.
-		_("Chinese zodiac {zodiac}").format(zodiac=zodiacText),
-		# Translators: Report item for the full moon time. {time} is the time of day.
-		_("full moon at {time}").format(time=formats.formatSolarTimeOnly(fullMoon.get_solar_time())),
-		formats.getPhaseDaySummary(solarDay),
+	termParts: list[str] = [formats.formatSolarTermCompact(previousJie)]
+	if not currentTerm.is_jie():
+		termParts.append(formats.formatSolarTermCompact(currentTerm))
+	termParts.append(formats.formatSolarTermCompact(nextTerm))
+	traditionalParts: list[str] = [
 		# Translators: Jianchu duty item, matching tyme4py's Duty type.
 		_("Jianchu duty {duty}").format(duty=lunarDay.get_duty()),
+		*formats.getTraditionalPeriodSummaries(solarDay),
 	]
-	parts.extend(formats.getTraditionalPeriodSummaries(solarDay))
-	return formats.joinParts(parts)
+	return formats.joinPartLines(
+		[
+			termParts,
+			[
+				# Translators: Report item for time remaining until the next solar term.
+				_("until {term} {remaining}").format(
+					term=nextTerm.get_name(),
+					remaining=formats.formatSecondsUntil(nextTermTime.subtract(solarTime)),
+				),
+			],
+			[
+				# Translators: Report item for the Chinese zodiac. {zodiac} is a zodiac animal name.
+				_("Chinese zodiac {zodiac}").format(zodiac=zodiacText),
+				# Translators: Report item for the full moon time. {time} is the time of day.
+				_("full moon at {time}").format(time=formats.formatSolarTimeOnly(fullMoon.get_solar_time())),
+				formats.getPhaseDaySummary(solarDay),
+			],
+			traditionalParts,
+		],
+	)
 
 
 def getBriefGregorianMessage(now: datetime | None = None) -> str:
@@ -93,19 +105,23 @@ def getDetailedGregorianMessage(now: datetime | None = None) -> str:
 		now = datetime.now()
 	solarTime = getSolarTime(now)
 	solarDay = solarTime.get_solar_day()
-	parts: list[str] = [
-		formats.formatSolarDate(solarDay),
-		formats.formatWeekday(solarDay),
-		formats.formatYearDay(solarDay),
-		formats.formatWeekNumber(solarDay),
-		formats.formatQuarter(solarDay),
-		formats.formatSolarMonthDayCount(solarDay),
-	]
+	statusParts: list[str] = []
 	gregorianHolidaySummary: str | None = formats.getGregorianHolidaySummary(solarTime)
 	if gregorianHolidaySummary:
-		parts.append(gregorianHolidaySummary)
+		statusParts.append(gregorianHolidaySummary)
 	gregorianDayStatus: str | None = formats.getGregorianDayStatus(solarDay)
 	if gregorianDayStatus:
-		parts.append(gregorianDayStatus)
-	parts.append(formats.formatWesternZodiacSign(solarDay))
-	return formats.joinParts(parts)
+		statusParts.append(gregorianDayStatus)
+	return formats.joinPartLines(
+		[
+			[formats.formatSolarDate(solarDay), formats.formatWeekday(solarDay)],
+			[
+				formats.formatYearDay(solarDay),
+				formats.formatWeekNumber(solarDay),
+				formats.formatQuarter(solarDay),
+				formats.formatSolarMonthDayCount(solarDay),
+			],
+			statusParts,
+			[formats.formatWesternZodiacSign(solarDay)],
+		],
+	)

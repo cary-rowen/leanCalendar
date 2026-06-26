@@ -1,5 +1,11 @@
 # leanCalendar Changelog
 
+## 0.2.6
+
+* Fixed detailed lunar reports so the current solar term is included when it is a qi term, preventing nearby solar terms from being skipped.
+* Show minutes in multi-day solar term countdowns for more precise remaining time.
+* Improved report readability by grouping F11 and detailed F12 output across semantic lines while preserving punctuation before line breaks.
+
 ## 0.2.3
 
 * Dependent Updates.
